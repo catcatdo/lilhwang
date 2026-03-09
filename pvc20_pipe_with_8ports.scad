@@ -6,7 +6,7 @@ $fn = 120;
 pipe_od = 20.0;
 pipe_wall = 2.2;
 pipe_id = pipe_od - 2*pipe_wall;
-pipe_len = 150; // visible segment length
+pipe_len = 170; // visible segment length (+20mm)
 
 // ==== Ports ====
 port_count = 8;
