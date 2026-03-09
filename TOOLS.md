@@ -129,9 +129,3 @@ Path: `workspace/stickers/emotes/`
 - 삐짐/불만: `rem_pout_angry_05.png`, `rem_angry_cloud_05.png`, `rem_angry_flirty_05.png`
 - 일상/서포트: `rem_serve_tea_05.png`, `rem_serve_tea_06.png`, `rem_please_05.png`
 - 피곤/잠: `rem_sleepy_stretch_05.png`, `rem_yawn_raise_05.png`, `rem_sleepy_seduce_05.png`
-
-## HQ Emote Outputs
-
-- 고화질 출력 경로: `workspace/stickers/emotes_hq/`
-- 방식: 기존 `emotes` PNG를 1024x1024 투명 캔버스로 업스케일 + 샤픈 처리
-- 용도: 텔레그램 전송 시 원본 대비 선명도 개선(단, 원본 디테일 한계는 존재)
