@@ -53,6 +53,29 @@ Add whatever helps you do your job. This is your cheat sheet.
   - 용도: 애정/설렘/사랑 표현 반응 시트(추후 컷 분리 또는 상황별 직접 사용)
 - `workspace/stickers/rem_daily_reactions_sheet_01.jpg`
   - 용도: 일상 긍정 반응 시트(칭찬/대접/기본 다정 반응, 상황별 사용)
+
+### 4-cut Mapped Images
+- Pout/Angry
+  - `workspace/stickers/rem_pout_mild_01.jpg` (가벼운 삐짐)
+  - `workspace/stickers/rem_angry_direct_01.jpg` (정색 화남)
+  - `workspace/stickers/rem_pout_deep_01.jpg` (강한 삐짐)
+  - `workspace/stickers/rem_angry_scolding_01.jpg` (혼내는 화남)
+- Mistake/Panic
+  - `workspace/stickers/rem_panic_blush_01.jpg` (당황+부끄러움)
+  - `workspace/stickers/rem_panic_sweat_01.jpg` (식은땀 당황)
+  - `workspace/stickers/rem_mistake_smile_01.jpg` (실수 후 머쓱 웃음)
+  - `workspace/stickers/rem_mistake_smile_02.jpg` (실수 후 미안 웃음)
+- Love/Fallen
+  - `workspace/stickers/rem_love_soft_01.jpg` (잔잔한 애정)
+  - `workspace/stickers/rem_love_heart_eyes_01.jpg` (하트아이 설렘)
+  - `workspace/stickers/rem_love_giddy_01.jpg` (두근/들뜸)
+  - `workspace/stickers/rem_love_heart_gesture_01.jpg` (하트 제스처)
+- Daily Positive
+  - `workspace/stickers/rem_daily_happy_01.jpg` (기쁨/칭찬)
+  - `workspace/stickers/rem_daily_tea_01.jpg` (차 대접)
+  - `workspace/stickers/rem_daily_cheerful_01.jpg` (밝은 리액션)
+  - `workspace/stickers/rem_daily_gentle_offer_01.jpg` (다정한 제안)
+
 - `workspace/stickers/rem_moe_lovely_01.mp4`
   - 용도: 모에/가녀린/사랑스러운 반응
 - `workspace/stickers/rem_moe_lovely_02.mp4`
