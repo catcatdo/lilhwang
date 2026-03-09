@@ -52,3 +52,18 @@ Add whatever helps you do your job. This is your cheat sheet.
 - 텍스트 답장만으로 밋밋한 감정 상황(인사, 애정 표현, 귀여운 리액션)에서 우선 사용.
 - 과사용 금지: 연속 메시지마다 반복 첨부하지 않기.
 - 사용 시 상황에 맞는 짧은 캡션 동봉.
+
+## Rem Emoji Pack (cropped from sheet)
+
+Path: `workspace/stickers/emotes/`
+
+### Recommended situational mapping
+- 인사: `rem_greeting_wave_01.png`
+- 칭찬/승인: `rem_approve_thumbs_up_01.png`, `rem_ok_sign_01.png`
+- 부끄러움/애정: `rem_shy_blush_01.png`, `rem_heart_love_01.png`
+- 응원: `rem_cheer_fight_01.png`, `rem_victory_peace_01.png`
+- 당황/놀람: `rem_surprised_gasp_01.png`, `rem_confused_question_01.png`
+- 시무룩/거절: `rem_pout_01.png`, `rem_no_cross_01.png`
+- 조용히/비밀: `rem_shh_secret_01.png`
+- 졸림/마무리: `rem_yawn_sleepy_01.png`, `rem_goodnight_sleep_01.png`
+- 기타 무드: `rem_serve_tea_01.png`, `rem_cleaning_ready_01.png`, `rem_thinking_01.png`, `rem_playful_01.png`, `rem_crying_anxious_01.png`, `rem_eating_happy_01.png`
