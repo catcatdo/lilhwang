@@ -91,3 +91,16 @@ Path: `workspace/stickers/emotes/`
 - 애정 표현 강화: `rem_finger_heart_01.png`, `rem_blow_kiss_01.png`, `rem_love_sign_01.png`, `rem_hug_doll_01.png`
 - 일상 무드: `rem_warm_drink_01.png`, `rem_reading_glasses_01.png`, `rem_cooking_happy_01.png`
 - 마무리/취침: `rem_goodnight_sleep_02.png`, `rem_victory_peace_02.png`, `rem_eating_happy_02.png`, `rem_serve_tea_02.png`
+
+## Rem Emoji Pack 3 (additional)
+
+Path: `workspace/stickers/emotes/`
+
+### Recommended situational mapping (additional)
+- 애정/설렘: `rem_love_eyes_01.png`, `rem_blow_kiss_02.png`, `rem_heart_hands_01.png`, `rem_tiny_heart_plea_01.png`
+- 수줍음/당황: `rem_blush_flustered_03.png`, `rem_embarrassed_hot_01.png`, `rem_shy_touch_01.png`
+- 귀여움/장난: `rem_cat_cry_cute_01.png`, `rem_cat_ear_play_03.png`
+- 차분/기본 반응: `rem_neutral_calm_01.png`, `rem_gentle_smile_01.png`, `rem_soft_smile_02.png`
+- 메이드 무드: `rem_maid_pose_01.png`, `rem_fullbody_maid_01.png`, `rem_tea_smile_03.png`
+- 휴식/취침: `rem_bed_sleepy_01.png`, `rem_bed_goodmorning_01.png`, `rem_seiza_cute_01.png`
+- 기타: `rem_flustered_bow_01.png`, `rem_shh_secret_02.png`
