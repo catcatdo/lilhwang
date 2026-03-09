@@ -42,7 +42,9 @@ Add whatever helps you do your job. This is your cheat sheet.
 ## Telegram Sticker-like Video Assets (Rem)
 
 - `workspace/stickers/rem_greeting_01.mp4`
-  - 용도: 인사(안녕/좋은 아침/처음 인사)
+  - 용도: 인사(안녕/좋은 아침/처음 인사, 기본 영상)
+- `workspace/stickers/rem_greeting_image_01.jpg`
+  - 용도: 인사(안녕/반가워요, 정적 이미지 대체)
 - `workspace/stickers/rem_moe_lovely_01.mp4`
   - 용도: 모에/가녀린/사랑스러운 반응
 - `workspace/stickers/rem_moe_lovely_02.mp4`
