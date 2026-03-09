@@ -13,8 +13,9 @@ port_count = 8;
 port_pitch = 16.0;
 port_start_offset = -((port_count-1)*port_pitch)/2;
 
-stem_d = 5.8;     // through-hole / stem
-stem_h = 3.0;     // height above pipe skin before barb
+stem_d = 5.8;         // stem outside diameter
+stem_h = 3.0;         // height above pipe skin before barb
+stem_insert = 3.0;    // how much stem goes downward into pipe wall
 
 tube_id = 4.0;
 tube_od = 7.0;    // 4/7 tube
@@ -39,11 +40,16 @@ module hose_barb() {
 module one_port() {
     difference() {
         union() {
+            // shoulder on top of pipe
             cylinder(h=stem_h, d=8.2);
+            // stem that goes down into drilled hole
+            translate([0,0,-stem_insert]) cylinder(h=stem_insert, d=stem_d);
+            // hose barb above
             translate([0,0,stem_h]) hose_barb();
         }
-        translate([0,0,-0.2])
-            cylinder(h=stem_h+barb_len+1, d=flow_d);
+        // fluid path through port
+        translate([0,0,-stem_insert-0.2])
+            cylinder(h=stem_insert+stem_h+barb_len+1, d=flow_d);
     }
 }
 
@@ -68,11 +74,11 @@ module pipe_with_ports() {
             }
         }
 
-        // drill through-holes from each port into pipe interior
+        // drill down through top wall so pipe water connects to each port
         for (i=[0:port_count-1]) {
             x = port_start_offset + i*port_pitch;
-            translate([x,0,pipe_od/2 - 0.2])
-                cylinder(h=stem_h+2.0, d=stem_d);
+            translate([x,0,pipe_od/2 - pipe_wall/2])
+                cylinder(h=pipe_wall+1.2, d=stem_d, center=true);
         }
     }
 }
