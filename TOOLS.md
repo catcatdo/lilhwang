@@ -78,3 +78,16 @@ Path: `workspace/stickers/emotes/`
 - 조용히/비밀: `rem_shh_secret_01.png`
 - 졸림/마무리: `rem_yawn_sleepy_01.png`, `rem_goodnight_sleep_01.png`
 - 기타 무드: `rem_serve_tea_01.png`, `rem_cleaning_ready_01.png`, `rem_thinking_01.png`, `rem_playful_01.png`, `rem_crying_anxious_01.png`, `rem_eating_happy_01.png`
+
+## Rem Emoji Pack 2 (additional)
+
+Path: `workspace/stickers/emotes/`
+
+### Recommended situational mapping (additional)
+- 밝은 인사/반가움: `rem_greeting_wave_02.png`, `rem_happy_cheek_01.png`
+- 수줍음/애정: `rem_blush_soft_02.png`, `rem_heart_love_02.png`
+- 선물/축하: `rem_gift_present_01.png`, `rem_cheer_lightstick_01.png`
+- 귀여운 리액션: `rem_cat_ear_cute_01.png`, `rem_bunny_ear_cute_01.png`, `rem_cat_paw_play_01.png`
+- 애정 표현 강화: `rem_finger_heart_01.png`, `rem_blow_kiss_01.png`, `rem_love_sign_01.png`, `rem_hug_doll_01.png`
+- 일상 무드: `rem_warm_drink_01.png`, `rem_reading_glasses_01.png`, `rem_cooking_happy_01.png`
+- 마무리/취침: `rem_goodnight_sleep_02.png`, `rem_victory_peace_02.png`, `rem_eating_happy_02.png`, `rem_serve_tea_02.png`
