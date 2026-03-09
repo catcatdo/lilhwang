@@ -118,6 +118,18 @@ Path: `workspace/stickers/emotes/`
 - 야간/피곤: `rem_sleepy_cover_02.png`
 - 기타: `rem_shy_invite_01.png`, `rem_heart_eyes_02.png`, `rem_seductive_01.png`, `rem_drunk_01.png`
 
+## Rem Emoji Pack 5 (additional)
+
+Path: `workspace/stickers/emotes/`
+
+### Recommended situational mapping (additional)
+- 인사/기본: `rem_flirty_hello_05.png`, `rem_greeting_wide_05.png`, `rem_okay_thumb_05.png`, `rem_salute_05.png`
+- 애정/플러팅: `rem_kiss_blow_05.png`, `rem_love_sign_text_05.png`, `rem_shy_shh_05.png`
+- 당황/머쓱: `rem_flustered_sweaty_05.png`, `rem_angry_blush_05.png`
+- 삐짐/불만: `rem_pout_angry_05.png`, `rem_angry_cloud_05.png`, `rem_angry_flirty_05.png`
+- 일상/서포트: `rem_serve_tea_05.png`, `rem_serve_tea_06.png`, `rem_please_05.png`
+- 피곤/잠: `rem_sleepy_stretch_05.png`, `rem_yawn_raise_05.png`, `rem_sleepy_seduce_05.png`
+
 ## HQ Emote Outputs
 
 - 고화질 출력 경로: `workspace/stickers/emotes_hq/`
