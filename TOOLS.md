@@ -47,6 +47,8 @@ Add whatever helps you do your job. This is your cheat sheet.
   - 용도: 인사(손인사 버전, 분할 이미지 크롭본)
 - `workspace/stickers/rem_pout_angry_sheet_01.jpg`
   - 용도: 삐짐/화남 반응 시트(추후 컷 분리 또는 상황별 직접 사용)
+- `workspace/stickers/rem_mistake_panic_sheet_01.jpg`
+  - 용도: 실수/당황 반응 시트(추후 컷 분리 또는 상황별 직접 사용)
 - `workspace/stickers/rem_moe_lovely_01.mp4`
   - 용도: 모에/가녀린/사랑스러운 반응
 - `workspace/stickers/rem_moe_lovely_02.mp4`
