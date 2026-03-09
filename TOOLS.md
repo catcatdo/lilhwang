@@ -117,3 +117,9 @@ Path: `workspace/stickers/emotes/`
 - 귀여운 포즈: `rem_peekaboo_01.png`, `rem_cold_lie_01.png`, `rem_playful_lie_02.png`
 - 야간/피곤: `rem_sleepy_cover_02.png`
 - 기타: `rem_shy_invite_01.png`, `rem_heart_eyes_02.png`, `rem_seductive_01.png`, `rem_drunk_01.png`
+
+## HQ Emote Outputs
+
+- 고화질 출력 경로: `workspace/stickers/emotes_hq/`
+- 방식: 기존 `emotes` PNG를 1024x1024 투명 캔버스로 업스케일 + 샤픈 처리
+- 용도: 텔레그램 전송 시 원본 대비 선명도 개선(단, 원본 디테일 한계는 존재)
