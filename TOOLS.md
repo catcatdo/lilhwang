@@ -43,6 +43,8 @@ Add whatever helps you do your job. This is your cheat sheet.
 
 - `workspace/stickers/rem_greeting_image_01.jpg`
   - 용도: 인사(안녕/좋은 아침/반가워요, 기본 이미지)
+- `workspace/stickers/rem_greeting_image_02.jpg`
+  - 용도: 인사(손인사 버전, 분할 이미지 크롭본)
 - `workspace/stickers/rem_moe_lovely_01.mp4`
   - 용도: 모에/가녀린/사랑스러운 반응
 - `workspace/stickers/rem_moe_lovely_02.mp4`
