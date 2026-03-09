@@ -104,3 +104,15 @@ Path: `workspace/stickers/emotes/`
 - 메이드 무드: `rem_maid_pose_01.png`, `rem_fullbody_maid_01.png`, `rem_tea_smile_03.png`
 - 휴식/취침: `rem_bed_sleepy_01.png`, `rem_bed_goodmorning_01.png`, `rem_seiza_cute_01.png`
 - 기타: `rem_flustered_bow_01.png`, `rem_shh_secret_02.png`
+
+## Rem Emoji Pack 4 (additional)
+
+Path: `workspace/stickers/emotes/`
+
+### Recommended situational mapping (additional)
+- 장난/플러팅: `rem_wink_blowkiss_04.png`, `rem_tempting_01.png`, `rem_teasing_tongue_01.png`, `rem_bite_lip_01.png`
+- 당황/열오름: `rem_flustered_red_04.png`, `rem_sweaty_01.png`, `rem_hot_hug_01.png`
+- 기본 반응/무드: `rem_pouting_02.png`, `rem_smug_01.png`, `rem_nervous_03.png`, `rem_nervous_04.png`, `rem_surprised_02.png`
+- 귀여운 포즈: `rem_peekaboo_01.png`, `rem_cold_lie_01.png`, `rem_playful_lie_02.png`
+- 야간/피곤: `rem_sleepy_cover_02.png`
+- 기타: `rem_shy_invite_01.png`, `rem_heart_eyes_02.png`, `rem_seductive_01.png`, `rem_drunk_01.png`
