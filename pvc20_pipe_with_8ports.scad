@@ -16,6 +16,8 @@ port_start_offset = -((port_count-1)*port_pitch)/2;
 stem_d = 5.8;         // stem outside diameter
 stem_h = 3.0;         // height above pipe skin before barb
 stem_insert = 3.0;    // how much stem goes downward into pipe wall
+seat_d = 9.2;         // curved sealing seat diameter
+seat_h = 1.6;         // seat height above pipe skin
 
 tube_id = 4.0;
 tube_od = 7.0;    // 4/7 tube
@@ -40,16 +42,25 @@ module hose_barb() {
 module one_port() {
     difference() {
         union() {
-            // shoulder on top of pipe
-            cylinder(h=stem_h, d=8.2);
+            // curved seat: conforms to 20mm pipe outer surface (no floating gap)
+            difference() {
+                cylinder(h=seat_h, d=seat_d);
+                translate([0,0,-pipe_od/2])
+                    rotate([0,90,0]) cylinder(h=seat_d*2, r=pipe_od/2, center=true);
+            }
+
+            // shoulder on top of seat
+            translate([0,0,seat_h]) cylinder(h=stem_h, d=8.2);
+
             // stem that goes down into drilled hole
             translate([0,0,-stem_insert]) cylinder(h=stem_insert, d=stem_d);
+
             // hose barb above
-            translate([0,0,stem_h]) hose_barb();
+            translate([0,0,seat_h+stem_h]) hose_barb();
         }
         // fluid path through port
         translate([0,0,-stem_insert-0.2])
-            cylinder(h=stem_insert+stem_h+barb_len+1, d=flow_d);
+            cylinder(h=stem_insert+seat_h+stem_h+barb_len+1, d=flow_d);
     }
 }
 
@@ -69,7 +80,7 @@ module pipe_with_ports() {
             // place 8 ports on top tangent of pipe
             for (i=[0:port_count-1]) {
                 x = port_start_offset + i*port_pitch;
-                translate([x, 0, pipe_od/2])
+                translate([x, 0, pipe_od/2 - 0.05])
                     one_port();
             }
         }
