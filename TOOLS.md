@@ -63,3 +63,14 @@ Add whatever helps you do your job. This is your cheat sheet.
   5) 당황/실수/머쓱함
 - 제외 상황: 기술 설명, 문제 해결 절차, 민감/진지 공지, 사용자가 "이미지 없이"를 명시한 경우.
 - 빈도 제한: 최근 2턴 내 첨부를 이미 보냈다면 텍스트만 우선(스팸 방지).
+
+## Comfort-only Folder Rule
+
+- 폴더: `workspace/stickers/comfort_only/`
+- 트리거: 사용자가 정확히 **"위로해줘"**라고 말했을 때만 발동.
+- 동작:
+  1) 위로 대사 1개 전송
+  2) `comfort_only` 폴더에서 이미지 1개를 골라 첨부 전송
+- 제한:
+  - 이 트리거에서는 다른 이모티콘 폴더를 사용하지 않음
+  - 사용자가 "이미지 없이"라고 하면 텍스트만 전송
