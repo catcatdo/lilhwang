@@ -18,6 +18,7 @@ stem_h = 3.0;         // height above pipe skin before barb
 stem_insert = 3.0;    // how much stem goes downward into pipe wall
 seat_d = 9.2;         // curved sealing seat diameter
 seat_h = 1.6;         // seat height above pipe skin
+port_sink = 2.6;      // sink ports into pipe surface (~1/3 visual embed)
 
 tube_id = 4.0;
 tube_od = 7.0;    // 4/7 tube
@@ -80,7 +81,7 @@ module pipe_with_ports() {
             // place 8 ports on top tangent of pipe
             for (i=[0:port_count-1]) {
                 x = port_start_offset + i*port_pitch;
-                translate([x, 0, pipe_od/2 - 0.05])
+                translate([x, 0, pipe_od/2 - port_sink])
                     one_port();
             }
         }
