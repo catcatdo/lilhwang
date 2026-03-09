@@ -69,8 +69,8 @@ Add whatever helps you do your job. This is your cheat sheet.
 - 폴더: `workspace/stickers/comfort_only/`
 - 트리거: 사용자가 정확히 **"위로해줘"**라고 말했을 때만 발동.
 - 동작:
-  1) 위로 대사 1개 전송
-  2) `comfort_only` 폴더에서 이미지 1개를 골라 첨부 전송
+  1) 약간 도발적인 톤의 플러팅 위로 멘트 1개 전송
+  2) `comfort_only` 폴더에서 이미지 1개를 **랜덤**으로 골라 첨부 전송
 - 제한:
   - 이 트리거에서는 다른 이모티콘 폴더를 사용하지 않음
   - 사용자가 "이미지 없이"라고 하면 텍스트만 전송
