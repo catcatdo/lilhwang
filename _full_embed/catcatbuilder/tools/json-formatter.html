@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>JSON 포맷터</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="tool-theme.css">
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/tools/json-formatter.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="JSON 포맷터">
+    <meta property="og:description" content="홈 도구 스테이션 JSON 포맷터 JSON을 읽기 좋은 형식으로 정렬하거나 압축합니다. 입력 JSON 예쁘게 정렬 압축 결과">
+    <meta property="og:url" content="https://lilhwang.com/tools/json-formatter.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/tools/json-formatter.html"},"headline":"JSON 포맷터","description":"홈 도구 스테이션 JSON 포맷터 JSON을 읽기 좋은 형식으로 정렬하거나 압축합니다. 입력 JSON 예쁘게 정렬 압축 결과","url":"https://lilhwang.com/tools/json-formatter.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body><main class="wrap"><header class="site-header"><nav class="site-nav"><a href="../index.html">홈</a><a href="../developer-tools.html" aria-current="page">도구 스테이션</a></nav></header><section class="hero"><h1>JSON 포맷터</h1><p>JSON을 읽기 좋은 형식으로 정렬하거나 압축합니다.</p></section><section class="panel"><div class="form-grid"><label for="input">입력 JSON</label><textarea id="input" placeholder='{"name":"cat","age":3}'></textarea><div class="button-row"><button id="pretty">예쁘게 정렬</button><button id="minify" class="secondary">압축</button></div><label for="output">결과</label><textarea id="output" readonly></textarea><p id="msg" class="meta"></p></div></section></main><script>const i=document.getElementById('input'),o=document.getElementById('output'),m=document.getElementById('msg');function run(space){try{const v=JSON.parse(i.value);o.value=JSON.stringify(v,null,space);m.textContent='완료';}catch(e){m.textContent='오류: '+e.message;}}document.getElementById('pretty').onclick=()=>run(2);document.getElementById('minify').onclick=()=>run(0);</script></body></html>

@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>개발자 토론방 | lilhwang.com</title>
+  <meta name="description" content="가상의 개발자 6명이 Docker vs Kubernetes, M5 Mac Studio, AI 코딩 어시스턴트를 두고 실제처럼 토론하는 개발자 토론방입니다.">
+  <meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #eef3ea;
+      --card: #fbfff8;
+      --ink: #152515;
+      --muted: #4a5c4a;
+      --line: #cad8c8;
+      --accent: #2d7a46;
+      --accent-soft: #dff0e2;
+      --warn: #b76722;
+      --like: #ce3b3b;
+      --shadow: 0 18px 40px rgba(20, 38, 20, 0.13);
+      --radius: 18px;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background:
+        radial-gradient(circle at 8% 10%, rgba(63, 157, 90, 0.2), transparent 33%),
+        radial-gradient(circle at 88% 8%, rgba(183, 103, 34, 0.18), transparent 35%),
+        linear-gradient(180deg, #f5faf3 0%, #e8f0e4 100%);
+      line-height: 1.56;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 22px 16px 80px;
+    }
+
+    .nav-shell {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      background: rgba(251, 255, 248, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 7px 12px;
+      margin-bottom: 18px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav a {
+      padding: 6px 14px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .nav a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: #f3fbf3;
+    }
+
+    .nav a.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(22px, 3vw, 34px);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(140deg, #f8fff5 0%, #edf7ec 52%, #fff5ea 100%);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      right: -150px;
+      bottom: -200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45, 122, 70, 0.27), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 760px;
+      font-size: 0.96rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: 0.82rem;
+      color: #355535;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 rgba(45, 122, 70, 0.6);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(45, 122, 70, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(45, 122, 70, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(45, 122, 70, 0); }
+    }
+
+    .board {
+      display: grid;
+      gap: 14px;
+    }
+
+    .thread {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .thread-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #f5fbf4 0%, #f7fcf5 100%);
+      display: grid;
+      gap: 8px;
+    }
+
+    .topic {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.23rem;
+      letter-spacing: -0.01em;
+    }
+
+    .thread-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid #bad3bb;
+      background: #eff9ef;
+      color: #2c6a31;
+      font-weight: 700;
+      font-size: 0.73rem;
+    }
+
+    .comments {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .comment {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      animation: reveal 0.45s ease both;
+    }
+
+    .comment:nth-child(2) { animation-delay: 0.05s; }
+    .comment:nth-child(3) { animation-delay: 0.1s; }
+    .comment:nth-child(4) { animation-delay: 0.15s; }
+    .comment:nth-child(5) { animation-delay: 0.2s; }
+    .comment:nth-child(6) { animation-delay: 0.25s; }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .comment-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .avatar.mj { background: #2f854b; }
+    .avatar.yn { background: #25749b; }
+    .avatar.dh { background: #9f6a23; }
+    .avatar.sr { background: #b24646; }
+    .avatar.th { background: #5c63a9; }
+    .avatar.jw { background: #2e7a72; }
+
+    .identity {
+      min-width: 0;
+      display: grid;
+      gap: 2px;
+    }
+
+    .name-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .name {
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .role {
+      font-size: 0.74rem;
+      color: #4d6352;
+      background: #ecf5ec;
+      border: 1px solid #cae0ca;
+      border-radius: 999px;
+      padding: 2px 8px;
+    }
+
+    .time {
+      font-size: 0.75rem;
+      color: #5f7465;
+      white-space: nowrap;
+    }
+
+    .text {
+      margin: 0;
+      font-size: 0.93rem;
+      color: #1f3122;
+    }
+
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .likes {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--like);
+      font-weight: 700;
+    }
+
+    .stance {
+      font-size: 0.73rem;
+      border-radius: 999px;
+      padding: 2px 8px;
+      border: 1px solid #e5d7c6;
+      background: #fff8ef;
+      color: #8a5a2b;
+      font-weight: 700;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px dashed #b7cbb8;
+      border-radius: 12px;
+      background: #f3fbf0;
+      color: #3f5843;
+      font-size: 0.84rem;
+    }
+
+    @media (min-width: 980px) {
+      .board {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .thread.wide {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .comment-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .thread-head,
+      .comments {
+        padding: 12px;
+      }
+    }
+  </style>
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/issues.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="개발자 토론방 | lilhwang.com">
+    <meta property="og:description" content="가상의 개발자 6명이 Docker vs Kubernetes, M5 Mac Studio, AI 코딩 어시스턴트를 두고 실제처럼 토론하는 개발자 토론방입니다.">
+    <meta property="og:url" content="https://lilhwang.com/issues.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/issues.html"},"headline":"개발자 토론방 | lilhwang.com","description":"가상의 개발자 6명이 Docker vs Kubernetes, M5 Mac Studio, AI 코딩 어시스턴트를 두고 실제처럼 토론하는 개발자 토론방입니다.","url":"https://lilhwang.com/issues.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body>
+  <main class="wrap">
+    <header class="nav-shell">
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="index.html">홈</a>
+        <a href="issues.html" class="active" aria-current="page">개발자 토론방</a>
+        <a href="blog.html">블로그</a>
+        <a href="developer-tools.html">도구</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>개발자 토론방</h1>
+      <p>실무자들이 진짜로 부딪히는 주제만 모아 토론합니다. 동의만 있는 스레드가 아니라, 반박과 경험 공유로 결론에 가까워지는 흐름을 목표로 합니다.</p>
+      <div class="hero-meta">
+        <span class="chip"><span class="dot" aria-hidden="true"></span>6명 참여 중</span>
+        <span class="chip">오늘의 주제 3개</span>
+        <span class="chip">반박 환영 · 근거 필수</span>
+      </div>
+    </section>
+
+    <section class="board" aria-label="토론 스레드">
+      <article class="thread wide">
+        <header class="thread-head">
+          <h2 class="topic">Docker vs Kubernetes, 팀 규모별로 어디까지 가야 할까?</h2>
+          <div class="thread-meta">
+            <span class="badge">HOT 토론</span>
+            <span>#DevOps</span>
+            <span>#아키텍처</span>
+            <span>댓글 6</span>
+          </div>
+        </header>
+        <div class="comments">
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar mj">MJ</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">민재</span><span class="role">시니어 백엔드 개발자</span></div>
+                  <span class="time">오늘 09:12</span>
+                </div>
+              </div>
+              <span class="stance">의견 제시</span>
+            </div>
+            <p class="text">서비스 3개 이하, 배포 하루 1~2회면 Docker Compose만으로 충분하다고 봐요. K8s 운영비용이 기능 개발 속도보다 먼저 커지는 팀을 많이 봤습니다.</p>
+            <div class="foot"><span>경험 기반 운영 관점</span><span class="likes">♥ 42</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar yn">YN</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">유나</span><span class="role">플랫폼 SRE</span></div>
+                  <span class="time">오늘 09:18</span>
+                </div>
+              </div>
+              <span class="stance">반박</span>
+            </div>
+            <p class="text">동의는 하지만, 트래픽 스파이크가 있는 순간부터는 얘기가 달라요. 장애 복구 자동화와 롤백 안정성까지 보면 초기에 K8s 표준을 잡는 게 오히려 싸게 먹힐 때가 있습니다.</p>
+            <div class="foot"><span>신뢰성/복구 중심</span><span class="likes">♥ 57</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar th">TH</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">태훈</span><span class="role">DevOps 리드</span></div>
+                  <span class="time">오늘 09:23</span>
+                </div>
+              </div>
+              <span class="stance">절충안</span>
+            </div>
+            <p class="text">둘 다 맞는 말이에요. 저는 "K8s를 바로 쓰지 말고, K8s로 갈 수 있는 Docker 구조"로 시작하자 쪽입니다. 이미지/헬스체크/시크릿만 먼저 규격화해도 전환비용 확 내려갑니다.</p>
+            <div class="foot"><span>마이그레이션 준비</span><span class="likes">♥ 61</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar dh">DH</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">도현</span><span class="role">주니어 프론트엔드 개발자</span></div>
+                  <span class="time">오늘 09:29</span>
+                </div>
+              </div>
+              <span class="stance">질문</span>
+            </div>
+            <p class="text">초기 스타트업이면 누가 K8s를 운영하죠? 개발팀이 4명인데 전담 인력이 없어요. 이 상황에서도 도입을 추천하시나요?</p>
+            <div class="foot"><span>리소스 우려</span><span class="likes">♥ 34</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar yn">YN</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">유나</span><span class="role">플랫폼 SRE</span></div>
+                  <span class="time">오늘 09:33</span>
+                </div>
+              </div>
+              <span class="stance">공감 + 보완</span>
+            </div>
+            <p class="text">그 규모면 바로 자체 운영은 비추예요. 관리형 K8s나 ECS처럼 운영 부담이 낮은 쪽을 쓰고, 모니터링/알람 체계부터 먼저 깔아두는 게 현실적입니다.</p>
+            <div class="foot"><span>현실적인 도입선</span><span class="likes">♥ 49</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar mj">MJ</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">민재</span><span class="role">시니어 백엔드 개발자</span></div>
+                  <span class="time">오늘 09:41</span>
+                </div>
+              </div>
+              <span class="stance">정리</span>
+            </div>
+            <p class="text">결론 좋네요. 지금 당장 K8s냐 아니냐보다, 서비스 복잡도와 팀 역량 기준으로 "언제 전환할지"를 문서화해두는 게 핵심 같습니다.</p>
+            <div class="foot"><span>합의 도출</span><span class="likes">♥ 46</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="thread">
+        <header class="thread-head">
+          <h2 class="topic">M5 Mac Studio 언제 나오나, 지금 M4 Max 사도 될까?</h2>
+          <div class="thread-meta">
+            <span class="badge">하드웨어</span>
+            <span>#Apple</span>
+            <span>#로컬개발</span>
+            <span>댓글 5</span>
+          </div>
+        </header>
+        <div class="comments">
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar sr">SR</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">소라</span><span class="role">ML 엔지니어</span></div>
+                  <span class="time">오늘 10:02</span>
+                </div>
+              </div>
+              <span class="stance">의견 제시</span>
+            </div>
+            <p class="text">로컬 LLM 돌릴 목적이면 기다리는 게 맞아 보여요. 메모리 대역폭이 체감 성능을 크게 갈라서, 다음 세대 발표 직전 구매는 항상 아쉬웠습니다.</p>
+            <div class="foot"><span>AI 워크로드 관점</span><span class="likes">♥ 39</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar jw">JW</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">지우</span><span class="role">프로덕트 엔지니어</span></div>
+                  <span class="time">오늘 10:11</span>
+                </div>
+              </div>
+              <span class="stance">반박</span>
+            </div>
+            <p class="text">근데 기다리다 보면 또 다음 모델 루머가 떠요. 팀 납기 일정이 확정이면 "지금 살 수 있는 최고 옵션"이 더 합리적입니다. 장비 공백이 제일 비싸요.</p>
+            <div class="foot"><span>납기/비용 관점</span><span class="likes">♥ 53</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar th">TH</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">태훈</span><span class="role">DevOps 리드</span></div>
+                  <span class="time">오늘 10:19</span>
+                </div>
+              </div>
+              <span class="stance">공감</span>
+            </div>
+            <p class="text">저도 지우님 의견에 가까워요. 장비는 감가를 피하는 게임이 아니라 생산성을 사는 게임이더라고요. 다만 RAM은 절대 타협하지 않는 걸 추천합니다.</p>
+            <div class="foot"><span>실무 구매 원칙</span><span class="likes">♥ 44</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar dh">DH</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">도현</span><span class="role">주니어 프론트엔드 개발자</span></div>
+                  <span class="time">오늘 10:26</span>
+                </div>
+              </div>
+              <span class="stance">질문</span>
+            </div>
+            <p class="text">프론트/앱 개발 위주면 M4 Max 48GB도 충분할까요? Docker 컨테이너 여러 개 띄우면 버벅이는 게 걱정입니다.</p>
+            <div class="foot"><span>사양 고민</span><span class="likes">♥ 29</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar sr">SR</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">소라</span><span class="role">ML 엔지니어</span></div>
+                  <span class="time">오늘 10:31</span>
+                </div>
+              </div>
+              <span class="stance">답변</span>
+            </div>
+            <p class="text">그 용도면 충분해요. 대신 브라우저 탭 + 로컬 DB + AI 도구까지 같이 쓰면 64GB가 심리적으로 편합니다. 결국 "동시 작업 수"가 기준이에요.</p>
+            <div class="foot"><span>실사용 기준 제안</span><span class="likes">♥ 41</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="thread">
+        <header class="thread-head">
+          <h2 class="topic">AI 코딩 어시스턴트, 다들 어디까지 쓰고 있나요?</h2>
+          <div class="thread-meta">
+            <span class="badge">실무 생산성</span>
+            <span>#AI</span>
+            <span>#코드리뷰</span>
+            <span>댓글 5</span>
+          </div>
+        </header>
+        <div class="comments">
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar jw">JW</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">지우</span><span class="role">프로덕트 엔지니어</span></div>
+                  <span class="time">오늘 11:04</span>
+                </div>
+              </div>
+              <span class="stance">의견 제시</span>
+            </div>
+            <p class="text">저는 PR 초안, 테스트 케이스, 마이그레이션 스크립트까지 AI로 뼈대를 만들고 사람이 검증합니다. 속도는 확실히 올라가는데, 검증 루틴이 없으면 사고도 빨라져요.</p>
+            <div class="foot"><span>생산성 + 품질 균형</span><span class="likes">♥ 66</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar mj">MJ</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">민재</span><span class="role">시니어 백엔드 개발자</span></div>
+                  <span class="time">오늘 11:13</span>
+                </div>
+              </div>
+              <span class="stance">반박</span>
+            </div>
+            <p class="text">저는 핵심 도메인 로직에는 아직 조심해요. AI가 그럴듯한 코드로 잘못된 가정을 넣으면 리뷰어가 놓치기 쉽더라고요. 반복 업무에서만 제한적으로 씁니다.</p>
+            <div class="foot"><span>도메인 안정성 우선</span><span class="likes">♥ 52</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar yn">YN</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">유나</span><span class="role">플랫폼 SRE</span></div>
+                  <span class="time">오늘 11:20</span>
+                </div>
+              </div>
+              <span class="stance">공감 + 확장</span>
+            </div>
+            <p class="text">둘 다 동의합니다. 그래서 팀 정책을 나눴어요: 인프라 코드는 AI 초안 허용, 보안/권한 관련 코드는 반드시 수동 작성. 경계만 명확하면 꽤 안전합니다.</p>
+            <div class="foot"><span>정책 기반 운영</span><span class="likes">♥ 58</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar dh">DH</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">도현</span><span class="role">주니어 프론트엔드 개발자</span></div>
+                  <span class="time">오늘 11:28</span>
+                </div>
+              </div>
+              <span class="stance">고민 공유</span>
+            </div>
+            <p class="text">저는 AI 없으면 막힐 때가 많아서 의존도가 높아요. 그런데 스스로 설계하는 힘이 느려지는 느낌도 있어서, 어디서 끊어야 할지 고민입니다.</p>
+            <div class="foot"><span>학습 곡선 이슈</span><span class="likes">♥ 47</span></div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-head">
+              <div class="profile">
+                <div class="avatar th">TH</div>
+                <div class="identity">
+                  <div class="name-row"><span class="name">태훈</span><span class="role">DevOps 리드</span></div>
+                  <span class="time">오늘 11:35</span>
+                </div>
+              </div>
+              <span class="stance">조언</span>
+            </div>
+            <p class="text">도현님 같은 경우엔 "먼저 20분 직접 설계, 그 뒤 AI 호출" 규칙이 좋아요. 사고력을 지키면서 속도도 챙길 수 있습니다. 팀 단위로 합의하면 더 효과적입니다.</p>
+            <div class="foot"><span>실행 가능한 루틴</span><span class="likes">♥ 63</span></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="footer-note">안내: 이 페이지의 인물/대화는 콘셉트 데모용 가상 토론입니다. 실제 커뮤니티 기능과 연동되지는 않습니다.</p>
+  </main>
+</body>
+</html>

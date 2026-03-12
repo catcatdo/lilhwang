@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>혼자가는빕스</title>
+  <link href="./style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+</head>
+<body>
+  <div id="app">
+    <header id="top-header">
+      <h1>혼자가는빕스</h1>
+      <p id="status-line">응원이 고양이 정원에 머물고 있어…</p>
+    </header>
+
+    <main id="scene">
+      <div class="sky-layer"></div>
+      <div class="wall-layer"></div>
+      <div class="deck-layer"></div>
+      <div class="garden-layer"></div>
+      <div id="cat-layer"></div>
+    </main>
+
+    <div id="ground-form">
+      <form id="message-form">
+        <input type="text" id="username" placeholder="이름" required maxlength="10">
+        <textarea id="usermessage" placeholder="응원 메시지" required maxlength="50"></textarea>
+        <button type="submit">메시지 남기기</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

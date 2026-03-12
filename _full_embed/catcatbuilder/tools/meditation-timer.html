@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>명상 타이머</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tool-theme.css">
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/tools/meditation-timer.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="명상 타이머">
+    <meta property="og:description" content="홈 도구 스테이션 명상 타이머 분 단위 타이머와 4-4 호흡 텍스트 가이드를 제공합니다. 명상 시간(분) 시작 10:00 숨 들이마시기 정지">
+    <meta property="og:url" content="https://lilhwang.com/tools/meditation-timer.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/tools/meditation-timer.html"},"headline":"명상 타이머","description":"홈 도구 스테이션 명상 타이머 분 단위 타이머와 4-4 호흡 텍스트 가이드를 제공합니다. 명상 시간(분) 시작 10:00 숨 들이마시기 정지","url":"https://lilhwang.com/tools/meditation-timer.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body>
+  <main class="wrap">
+    <header class="site-header">
+      <nav class="site-nav">
+        <a href="../index.html">홈</a>
+        <a href="../developer-tools.html" aria-current="page">도구 스테이션</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <h1>명상 타이머</h1>
+      <p>분 단위 타이머와 4-4 호흡 텍스트 가이드를 제공합니다.</p>
+    </section>
+    <section class="panel">
+      <div class="form-row two">
+        <div>
+          <label for="minutes">명상 시간(분)</label>
+          <input id="minutes" type="number" min="1" value="10">
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button id="start">시작</button>
+        </div>
+      </div>
+      <div id="time" class="stat">10:00</div>
+      <div id="breath" class="result">숨 들이마시기</div>
+      <div class="button-row">
+        <button id="stop" class="secondary">정지</button>
+      </div>
+    </section>
+  </main>
+  <script>
+    const minutesEl = document.getElementById('minutes');
+    const startEl = document.getElementById('start');
+    const stopEl = document.getElementById('stop');
+    const timeEl = document.getElementById('time');
+    const breathEl = document.getElementById('breath');
+
+    const phases = ['숨 들이마시기', '숨 멈추기', '숨 내쉬기', '숨 멈추기'];
+    let left = 600;
+    let timerInt = null;
+    let breathInt = null;
+    let phase = 0;
+
+    function draw() {
+      const mins = String(Math.floor(left / 60)).padStart(2, '0');
+      const secs = String(left % 60).padStart(2, '0');
+      timeEl.textContent = `${mins}:${secs}`;
+    }
+
+    startEl.addEventListener('click', () => {
+      left = (Number(minutesEl.value) || 10) * 60;
+      draw();
+
+      clearInterval(timerInt);
+      clearInterval(breathInt);
+
+      timerInt = setInterval(() => {
+        left -= 1;
+        draw();
+        if (left <= 0) {
+          clearInterval(timerInt);
+          clearInterval(breathInt);
+          breathEl.textContent = '완료. 수고했어요.';
+          alert('명상 시간이 끝났습니다.');
+        }
+      }, 1000);
+
+      phase = 0;
+      breathEl.textContent = phases[phase];
+      breathInt = setInterval(() => {
+        phase = (phase + 1) % phases.length;
+        breathEl.textContent = phases[phase];
+      }, 4000);
+    });
+
+    stopEl.addEventListener('click', () => {
+      clearInterval(timerInt);
+      clearInterval(breathInt);
+    });
+
+    draw();
+  </script>
+</body>
+</html>

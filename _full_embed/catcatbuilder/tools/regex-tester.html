@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>정규식 테스터</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="tool-theme.css">
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/tools/regex-tester.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="정규식 테스터">
+    <meta property="og:description" content="홈 도구 스테이션 정규식 테스터 패턴과 플래그를 입력해 매칭 결과를 확인합니다. 패턴 플래그 텍스트 cat, category, dog, CAT 테스트 결과가 여기에 표시됩니다.">
+    <meta property="og:url" content="https://lilhwang.com/tools/regex-tester.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/tools/regex-tester.html"},"headline":"정규식 테스터","description":"홈 도구 스테이션 정규식 테스터 패턴과 플래그를 입력해 매칭 결과를 확인합니다. 패턴 플래그 텍스트 cat, category, dog, CAT 테스트 결과가 여기에 표시됩니다.","url":"https://lilhwang.com/tools/regex-tester.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body><main class="wrap"><header class="site-header"><nav class="site-nav"><a href="../index.html">홈</a><a href="../developer-tools.html" aria-current="page">도구 스테이션</a></nav></header><section class="hero"><h1>정규식 테스터</h1><p>패턴과 플래그를 입력해 매칭 결과를 확인합니다.</p></section><section class="panel form-grid"><div class="form-row two"><div><label for="pattern">패턴</label><input id="pattern" value="\\bcat\\w*"/></div><div><label for="flags">플래그</label><input id="flags" value="gi"/></div></div><label for="text">텍스트</label><textarea id="text">cat, category, dog, CAT</textarea><div class="button-row"><button id="test">테스트</button></div><div id="result" class="result">결과가 여기에 표시됩니다.</div></section></main><script>document.getElementById('test').onclick=()=>{const p=document.getElementById('pattern').value,f=document.getElementById('flags').value,t=document.getElementById('text').value,r=document.getElementById('result');try{const re=new RegExp(p,f);const m=[...t.matchAll(re)].map(v=>v[0]);r.textContent=m.length?`매칭 ${m.length}개: ${m.join(', ')}`:'매칭 없음';}catch(e){r.textContent='오류: '+e.message;}};</script></body></html>

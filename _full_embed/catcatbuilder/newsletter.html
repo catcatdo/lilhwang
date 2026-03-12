@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주간 뉴스레터 | 릴황</title>
+  <meta name="description" content="주간 인기글 TOP 5와 함께 이메일 뉴스레터를 구독하세요.">
+  <meta name="theme-color" content="#d35400">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/images/icons/icon-192.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://lilhwang.com/newsletter.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="주간 뉴스레터 | 릴황">
+  <meta property="og:description" content="주간 인기글 TOP 5와 핵심 소식을 메일로 받아보세요.">
+  <meta property="og:url" content="https://lilhwang.com/newsletter.html">
+  <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+  <meta property="og:site_name" content="릴황">
+  <meta property="og:locale" content="ko_KR">
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --surface: #ffffff;
+      --line: #d9d5cc;
+      --text: #111111;
+      --muted: #5b5b5b;
+      --accent: #bd4a0f;
+      --accent-soft: #fff0e8;
+      --ok: #0f7a3f;
+      --err: #ad1f1f;
+      --radius: 14px;
+      --shadow: 0 12px 32px rgba(17, 17, 17, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: radial-gradient(circle at 10% 10%, #fff9f4 0%, var(--bg) 55%, #efede5 100%);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .wrap {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .top-nav a {
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 0.85rem;
+      color: inherit;
+      background: #fbfaf7;
+    }
+
+    .top-nav a:hover {
+      border-color: #ebbaa1;
+      background: var(--accent-soft);
+      color: #882f09;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+    }
+
+    .sub-title {
+      margin: 0 0 10px;
+      font-size: 1.02rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: baseline;
+    }
+
+    .sub-title small {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.8rem;
+    }
+
+    .top-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .top-list li a {
+      display: grid;
+      gap: 4px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fcfcfa;
+      text-decoration: none;
+      color: inherit;
+      padding: 11px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .top-list li a:hover {
+      transform: translateY(-1px);
+      border-color: #ebbaa1;
+      background: #fffaf6;
+    }
+
+    .rank {
+      color: #9a4c24;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 0.93rem;
+      line-height: 1.35;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    form {
+      display: grid;
+      gap: 10px;
+    }
+
+    label {
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font: inherit;
+      background: #fff;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font: inherit;
+      font-weight: 700;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .status {
+      min-height: 22px;
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--err); }
+
+    .helper {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.82rem;
+    }
+
+    .cta-links {
+      margin-top: 6px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.84rem;
+    }
+
+    .cta-links a {
+      color: #6a2f13;
+      text-underline-offset: 2px;
+    }
+
+    @media (max-width: 860px) {
+      body { padding: 14px; }
+      .grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="panel">
+      <nav class="top-nav" aria-label="주요 페이지">
+        <a href="index.html">홈</a>
+        <a href="blog.html">블로그</a>
+        <a href="newsletter.html">뉴스레터</a>
+        <a href="newsletter-archive.html">아카이브</a>
+      </nav>
+    </section>
+
+    <section class="panel hero">
+      <h1>주간 뉴스레터</h1>
+      <p>한 주 동안 반응이 좋았던 글 5개와 핵심 요약을 매주 금요일 메일로 보내드립니다.</p>
+    </section>
+
+    <section class="grid" aria-label="뉴스레터 구성">
+      <article class="panel">
+        <h2 class="sub-title">주간 인기글 TOP 5 <small id="top5Range">최근 7일 기준</small></h2>
+        <ol id="top5List" class="top-list">
+          <li>데이터를 불러오는 중...</li>
+        </ol>
+      </article>
+
+      <article class="panel">
+        <h2 class="sub-title">이메일 구독</h2>
+        <form id="newsletterSubscribeForm" novalidate>
+          <label for="newsletterEmail">이메일</label>
+          <div class="form-row">
+            <input id="newsletterEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
+            <button id="newsletterSubmitBtn" type="submit">구독하기</button>
+          </div>
+          <div id="newsletterStatus" class="status" aria-live="polite"></div>
+          <p class="helper">구독 이메일은 Google Sheets에 자동 저장됩니다.</p>
+        </form>
+        <hr style="border:none;border-top:1px solid #f0d9c6;margin:16px 0;">
+        <h2 class="sub-title">브라우저 푸시 알림</h2>
+        <div class="form-row">
+          <button id="pushSubscribeBtn" type="button">푸시 알림 켜기</button>
+        </div>
+        <div id="pushStatus" class="status" aria-live="polite"></div>
+        <p class="helper">새 글 발행 시 브라우저 알림으로 바로 받아보실 수 있습니다.</p>
+        <div class="cta-links">
+          <a href="newsletter-archive.html">지난 뉴스레터 보기</a>
+          <a href="issues-rss.xml" target="_blank" rel="noopener">뉴스 RSS</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+    function resolveNewsletterEndpoint() {
+      const base = (window.__NEWSLETTER_API_BASE__ || "").trim();
+      if (!base) return "/newsletter/subscribe";
+      return `${base.replace(/\/$/, "")}/newsletter/subscribe`;
+    }
+
+    function resolvePushEndpoint(path) {
+      const base = (window.__NEWSLETTER_API_BASE__ || "").trim();
+      if (!base) return path;
+      return `${base.replace(/\/$/, "")}${path}`;
+    }
+
+    function formatDate(iso) {
+      const date = new Date(iso);
+      if (Number.isNaN(date.getTime())) return "날짜 미상";
+      return new Intl.DateTimeFormat("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(date);
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    async function loadTop5() {
+      const listEl = document.getElementById("top5List");
+      const rangeEl = document.getElementById("top5Range");
+
+      try {
+        const response = await fetch("posts.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const data = await response.json();
+        const posts = Array.isArray(data.posts) ? data.posts : [];
+
+        const now = Date.now();
+        const recentWeekly = posts
+          .filter((post) => {
+            const ts = new Date(post.date).getTime();
+            return !Number.isNaN(ts) && now - ts <= (7 * MS_PER_DAY);
+          })
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const selected = (recentWeekly.length >= 5 ? recentWeekly : posts
+          .slice()
+          .sort((a, b) => new Date(b.date) - new Date(a.date))).slice(0, 5);
+
+        rangeEl.textContent = recentWeekly.length >= 5 ? "최근 7일 기준" : "최신 발행 기준";
+
+        if (!selected.length) {
+          listEl.innerHTML = "<li>표시할 글이 없습니다.</li>";
+          return;
+        }
+
+        listEl.innerHTML = selected.map((post, index) => {
+          const link = post.slug ? `blog.html?post=${encodeURIComponent(post.slug)}` : "blog.html";
+          return `
+            <li>
+              <a href="${link}">
+                <span class="rank">TOP ${index + 1}</span>
+                <p class="title">${escapeHtml(post.title)}</p>
+                <span class="meta">${escapeHtml(post.category || "blog")} · ${formatDate(post.date)}</span>
+              </a>
+            </li>
+          `;
+        }).join("");
+      } catch (error) {
+        listEl.innerHTML = "<li>인기글 데이터를 불러오지 못했습니다.</li>";
+      }
+    }
+
+    function setupSubscriptionForm() {
+      const form = document.getElementById("newsletterSubscribeForm");
+      const input = document.getElementById("newsletterEmail");
+      const button = document.getElementById("newsletterSubmitBtn");
+      const statusEl = document.getElementById("newsletterStatus");
+
+      function setStatus(text, type) {
+        statusEl.textContent = text;
+        statusEl.className = `status${type ? ` ${type}` : ""}`;
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const email = input.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          setStatus("유효한 이메일 주소를 입력해 주세요.", "err");
+          return;
+        }
+
+        button.disabled = true;
+        setStatus("구독 정보를 저장하는 중입니다...", "");
+
+        try {
+          const endpoint = resolveNewsletterEndpoint();
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email,
+              source: "newsletter.html",
+              subscribedAt: new Date().toISOString(),
+              userAgent: navigator.userAgent,
+              referrer: document.referrer || "direct"
+            })
+          });
+
+          let result = null;
+          try {
+            result = await response.json();
+          } catch (_) {
+            result = null;
+          }
+
+          if (!response.ok || !result?.ok) {
+            throw new Error(result?.message || `요청 실패 (${response.status})`);
+          }
+
+          setStatus("구독이 완료되었습니다. 다음 발송 때부터 받아보실 수 있어요.", "ok");
+          form.reset();
+        } catch (error) {
+          setStatus(`구독 실패: ${error.message}`, "err");
+        } finally {
+          button.disabled = false;
+        }
+      });
+    }
+
+    function urlBase64ToUint8Array(base64String) {
+      const padding = "=".repeat((4 - (base64String.length % 4 || 4)) % 4);
+      const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+      const rawData = atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; i += 1) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+    }
+
+    async function ensureServiceWorker() {
+      if (!("serviceWorker" in navigator)) return null;
+      const existing = await navigator.serviceWorker.getRegistration();
+      if (existing) return existing;
+      return navigator.serviceWorker.register("/sw.js");
+    }
+
+    function setupPushSubscription() {
+      const btn = document.getElementById("pushSubscribeBtn");
+      const statusEl = document.getElementById("pushStatus");
+
+      function setStatus(text, type) {
+        statusEl.textContent = text;
+        statusEl.className = `status${type ? ` ${type}` : ""}`;
+      }
+
+      if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+        btn.disabled = true;
+        setStatus("이 브라우저는 푸시 알림을 지원하지 않습니다.", "err");
+        return;
+      }
+
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        setStatus("브라우저 알림 권한을 확인하는 중입니다...", "");
+
+        try {
+          const registration = await ensureServiceWorker();
+          if (!registration) {
+            throw new Error("Service Worker를 사용할 수 없습니다.");
+          }
+          let permission = Notification.permission;
+          if (permission !== "granted") {
+            permission = await Notification.requestPermission();
+          }
+          if (permission !== "granted") {
+            throw new Error("알림 권한이 허용되지 않았습니다.");
+          }
+
+          const keyResponse = await fetch(resolvePushEndpoint("/push/public-key"), { cache: "no-store" });
+          const keyPayload = await keyResponse.json();
+          if (!keyResponse.ok || !keyPayload?.publicKey) {
+            throw new Error(keyPayload?.message || "푸시 공개키를 가져오지 못했습니다.");
+          }
+
+          const serverKey = urlBase64ToUint8Array(keyPayload.publicKey);
+          const existing = await registration.pushManager.getSubscription();
+          const subscription = existing || await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: serverKey
+          });
+
+          const saveResponse = await fetch(resolvePushEndpoint("/push/subscribe"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              source: "newsletter.html",
+              userAgent: navigator.userAgent,
+              subscription: subscription.toJSON()
+            })
+          });
+          const savePayload = await saveResponse.json().catch(() => null);
+          if (!saveResponse.ok || !savePayload?.ok) {
+            throw new Error(savePayload?.message || `구독 저장 실패 (${saveResponse.status})`);
+          }
+
+          setStatus("푸시 알림이 활성화되었습니다. 새 글이 올라오면 알려드릴게요.", "ok");
+        } catch (error) {
+          setStatus(`푸시 알림 설정 실패: ${error.message}`, "err");
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    }
+
+    loadTop5();
+    setupSubscriptionForm();
+    ensureServiceWorker().catch((error) => {
+      console.error("failed to register service worker", error);
+    });
+    setupPushSubscription();
+  </script>
+</body>
+</html>

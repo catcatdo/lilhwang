@@ -1,0 +1,26 @@
+{
+  "name": "오늘의 개발자 뉴스",
+  "short_name": "개발자 뉴스",
+  "description": "해커뉴스 스타일 타임라인과 커뮤니티 인기글을 빠르게 확인하는 PWA",
+  "lang": "ko-KR",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f3f4ef",
+  "theme_color": "#d35400",
+  "icons": [
+    {
+      "src": "/images/icons/icon-192.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/icons/icon-512.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

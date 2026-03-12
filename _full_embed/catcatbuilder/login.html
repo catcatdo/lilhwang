@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 로그인 | 릴황</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #666;
+      --line: #d8dbe6;
+      --primary: #1769ff;
+      --danger: #d93025;
+      --ok: #137333;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "Noto Sans KR", sans-serif;
+      background: radial-gradient(circle at top, #eef3ff 0%, var(--bg) 45%);
+      color: var(--text);
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 460px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 18px 40px rgba(33, 48, 87, 0.12);
+    }
+    h1 { margin: 0 0 8px; font-size: 1.5rem; }
+    .muted { color: var(--muted); margin: 0 0 18px; }
+    label { display: block; margin: 12px 0 6px; font-weight: 600; }
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      outline: none;
+    }
+    input:focus { border-color: var(--primary); }
+    button {
+      width: 100%;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 14px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .status {
+      margin-top: 14px;
+      min-height: 22px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .status.error { color: var(--danger); }
+    .status.ok { color: var(--ok); }
+    code {
+      display: block;
+      margin-top: 14px;
+      background: #f3f5f9;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 12px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>관리자 로그인</h1>
+    <p class="muted">JWT 토큰을 발급해 관리자 API 인증에 사용합니다.</p>
+    <label for="username">아이디</label>
+    <input id="username" type="text" value="catcatdo" autocomplete="username">
+    <label for="password">비밀번호</label>
+    <input id="password" type="password" autocomplete="current-password">
+    <button id="login-btn" type="button">로그인</button>
+    <p id="status" class="status"></p>
+    <code id="token-preview" style="display:none;"></code>
+  </main>
+
+  <script>
+    const AUTH_API_BASE = (window.__AUTH_API_BASE__ || 'https://catcatbuilder-admin.catcatdo-bc9.workers.dev').trim();
+    const TOKEN_STORAGE_KEY = 'adminJwtToken';
+    const EXPIRES_STORAGE_KEY = 'adminJwtExpiresAt';
+
+    const statusEl = document.getElementById('status');
+    const tokenEl = document.getElementById('token-preview');
+    const usernameEl = document.getElementById('username');
+    const passwordEl = document.getElementById('password');
+    const buttonEl = document.getElementById('login-btn');
+
+    async function login() {
+      const username = usernameEl.value.trim();
+      const password = passwordEl.value;
+      if (!username || !password) {
+        setStatus('아이디와 비밀번호를 입력해 주세요.', true);
+        return;
+      }
+
+      buttonEl.disabled = true;
+      setStatus('로그인 중...');
+      try {
+        const res = await fetch(`${AUTH_API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!res.ok || !data?.token) {
+          throw new Error(data?.message || '인증 실패');
+        }
+
+        const expiresAt = Date.now() + ((Number(data.expiresIn) || 0) * 1000);
+        localStorage.setItem(TOKEN_STORAGE_KEY, data.token);
+        localStorage.setItem(EXPIRES_STORAGE_KEY, String(expiresAt));
+        setStatus('로그인 성공. 토큰이 저장되었습니다.', false, true);
+
+        tokenEl.style.display = 'block';
+        tokenEl.textContent = `Bearer ${data.token}`;
+        passwordEl.value = '';
+      } catch (error) {
+        setStatus(error.message || '로그인 실패', true);
+      } finally {
+        buttonEl.disabled = false;
+      }
+    }
+
+    function setStatus(message, isError, isOk) {
+      statusEl.textContent = message;
+      statusEl.className = `status${isError ? ' error' : ''}${isOk ? ' ok' : ''}`;
+    }
+
+    buttonEl.addEventListener('click', login);
+    passwordEl.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') login();
+    });
+  </script>
+</body>
+</html>

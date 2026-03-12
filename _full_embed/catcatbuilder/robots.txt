@@ -1,0 +1,34 @@
+# robots.txt for lilhwang.com
+
+User-agent: *
+Allow: /
+Crawl-delay: 5
+
+# Block internal/admin areas
+Disallow: /admin.html
+Disallow: /api/
+Disallow: /.github/
+Disallow: /.auto_content/
+Disallow: /auto_content/
+Disallow: /scripts/
+Disallow: /worker/
+
+# Explicit major crawler rules (same policy)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+User-agent: AhrefsBot
+Allow: /
+Crawl-delay: 20
+
+User-agent: SemrushBot
+Allow: /
+Crawl-delay: 20
+
+Sitemap: https://lilhwang.com/sitemap.xml

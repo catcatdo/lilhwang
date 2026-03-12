@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>할 일 리스트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tool-theme.css">
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/tools/todo-list.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="할 일 리스트">
+    <meta property="og:description" content="홈 도구 스테이션 할 일 리스트 브라우저에 저장되는 간단한 TODO 리스트입니다. 추가">
+    <meta property="og:url" content="https://lilhwang.com/tools/todo-list.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/tools/todo-list.html"},"headline":"할 일 리스트","description":"홈 도구 스테이션 할 일 리스트 브라우저에 저장되는 간단한 TODO 리스트입니다. 추가","url":"https://lilhwang.com/tools/todo-list.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body>
+  <main class="wrap">
+    <header class="site-header">
+      <nav class="site-nav">
+        <a href="../index.html">홈</a>
+        <a href="../developer-tools.html" aria-current="page">도구 스테이션</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <h1>할 일 리스트</h1>
+      <p>브라우저에 저장되는 간단한 TODO 리스트입니다.</p>
+    </section>
+    <section class="panel">
+      <div class="form-row two">
+        <input id="task" placeholder="할 일을 입력하세요">
+        <button id="add">추가</button>
+      </div>
+      <div id="list" class="form-grid" style="margin-top:10px"></div>
+    </section>
+  </main>
+  <script>
+    const storageKey = 'daily_todo_items';
+    const taskEl = document.getElementById('task');
+    const addBtn = document.getElementById('add');
+    const listEl = document.getElementById('list');
+
+    let items = JSON.parse(localStorage.getItem(storageKey) || '[]');
+
+    function persist() {
+      localStorage.setItem(storageKey, JSON.stringify(items));
+    }
+
+    function render() {
+      listEl.innerHTML = '';
+      if (!items.length) {
+        listEl.innerHTML = '<p class="meta">할 일이 없습니다.</p>';
+        return;
+      }
+
+      items.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'result';
+
+        const label = document.createElement('label');
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.checked = item.done;
+        check.addEventListener('change', () => {
+          items[index].done = check.checked;
+          persist();
+          render();
+        });
+
+        label.appendChild(check);
+        label.append(` ${item.text}`);
+
+        const del = document.createElement('button');
+        del.className = 'secondary';
+        del.style.marginTop = '8px';
+        del.textContent = '삭제';
+        del.addEventListener('click', () => {
+          items.splice(index, 1);
+          persist();
+          render();
+        });
+
+        row.appendChild(label);
+        row.appendChild(del);
+        listEl.appendChild(row);
+      });
+    }
+
+    addBtn.addEventListener('click', () => {
+      const text = taskEl.value.trim();
+      if (!text) return;
+      items.push({ text, done: false });
+      taskEl.value = '';
+      persist();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

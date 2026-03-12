@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BMI 계산기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tool-theme.css">
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/tools/bmi-calculator.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BMI 계산기">
+    <meta property="og:description" content="홈 도구 스테이션 BMI 계산기 키와 몸무게로 체질량지수(BMI)를 계산합니다. 키 (cm) 몸무게 (kg) 계산">
+    <meta property="og:url" content="https://lilhwang.com/tools/bmi-calculator.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/tools/bmi-calculator.html"},"headline":"BMI 계산기","description":"홈 도구 스테이션 BMI 계산기 키와 몸무게로 체질량지수(BMI)를 계산합니다. 키 (cm) 몸무게 (kg) 계산","url":"https://lilhwang.com/tools/bmi-calculator.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body>
+  <main class="wrap">
+    <header class="site-header">
+      <nav class="site-nav">
+        <a href="../index.html">홈</a>
+        <a href="../developer-tools.html" aria-current="page">도구 스테이션</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <h1>BMI 계산기</h1>
+      <p>키와 몸무게로 체질량지수(BMI)를 계산합니다.</p>
+    </section>
+    <section class="panel form-grid">
+      <div class="form-row two">
+        <div>
+          <label for="height">키 (cm)</label>
+          <input id="height" type="number" value="170">
+        </div>
+        <div>
+          <label for="weight">몸무게 (kg)</label>
+          <input id="weight" type="number" value="65">
+        </div>
+      </div>
+      <div class="button-row">
+        <button id="calc">계산</button>
+      </div>
+      <div id="result" class="result"></div>
+    </section>
+  </main>
+  <script>
+    const heightEl = document.getElementById('height');
+    const weightEl = document.getElementById('weight');
+    const calcBtn = document.getElementById('calc');
+    const resultEl = document.getElementById('result');
+
+    function calculate() {
+      const h = Number(heightEl.value) / 100;
+      const w = Number(weightEl.value);
+      if (!h || !w) {
+        resultEl.textContent = '값을 확인하세요.';
+        return;
+      }
+      const bmi = w / (h * h);
+      let label = '정상';
+      if (bmi < 18.5) label = '저체중';
+      else if (bmi >= 25) label = '과체중';
+      resultEl.textContent = `BMI ${bmi.toFixed(1)} (${label})`;
+    }
+
+    calcBtn.addEventListener('click', calculate);
+    calculate();
+  </script>
+</body>
+</html>
