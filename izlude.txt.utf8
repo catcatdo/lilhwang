@@ -1,0 +1,276 @@
+//===== rAthena Script ======================================= 
+//= Izlude Town Renewal
+//===== By: ================================================== 
+//= Masao
+//===== Current Version: ===================================== 
+//= 1.2
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Izlude town NPCs.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. Still missing many new NPCs and their dialogues. [Masao]
+//= 1.1 Updated to match the official script. [Euphy]
+//= 1.2 Added Channel Warper and Izlude duplicates. [Euphy]
+//============================================================
+
+// Izlude
+//============================================================
+izlude,197,205,1	duplicate(Sailor_izlude)	선원#izlude	4W_SAILOR
+izlude_a,197,205,1	duplicate(Sailor_izlude)	선원#izlude_a	4W_SAILOR
+izlude_b,197,205,1	duplicate(Sailor_izlude)	선원#izlude_b	4W_SAILOR
+izlude_c,197,205,1	duplicate(Sailor_izlude)	선원#izlude_c	4W_SAILOR
+izlude_d,197,205,1	duplicate(Sailor_izlude)	선원#izlude_d	4W_SAILOR
+
+izlude,71,92,2	duplicate(Bonne_izlude)	본느#izlude	4_F_01
+izlude_a,71,92,2	duplicate(Bonne_izlude)	본느#izlude_a	4_F_01
+izlude_b,71,92,2	duplicate(Bonne_izlude)	본느#izlude_b	4_F_01
+izlude_c,71,92,2	duplicate(Bonne_izlude)	본느#izlude_c	4_F_01
+izlude_d,71,92,2	duplicate(Bonne_izlude)	본느#izlude_d	4_F_01
+
+izlude,172,215,4	duplicate(Charfri_izlude)	샤프리#izlude	4_F_02
+izlude_a,172,215,4	duplicate(Charfri_izlude)	샤프리#izlude_a	4_F_02
+izlude_b,172,215,4	duplicate(Charfri_izlude)	샤프리#izlude_b	4_F_02
+izlude_c,172,215,4	duplicate(Charfri_izlude)	샤프리#izlude_c	4_F_02
+izlude_d,172,215,4	duplicate(Charfri_izlude)	샤프리#izlude_d	4_F_02
+
+izlude,174,164,4	duplicate(Cuskoal_izlude)	쿠스코알#izlude	4_F_TELEPORTER
+izlude_a,174,164,4	duplicate(Cuskoal_izlude)	쿠스코알#izlude_a	4_F_TELEPORTER
+izlude_b,174,164,4	duplicate(Cuskoal_izlude)	쿠스코알#izlude_b	4_F_TELEPORTER
+izlude_c,174,164,4	duplicate(Cuskoal_izlude)	쿠스코알#izlude_c	4_F_TELEPORTER
+izlude_d,174,164,4	duplicate(Cuskoal_izlude)	쿠스코알#izlude_d	4_F_TELEPORTER
+
+izlude,85,103,4	duplicate(Dega_izlude)	데가#izlude	4_M_02
+izlude_a,85,103,4	duplicate(Dega_izlude)	데가#izlude_a	4_M_02
+izlude_b,85,103,4	duplicate(Dega_izlude)	데가#izlude_b	4_M_02
+izlude_c,85,103,4	duplicate(Dega_izlude)	데가#izlude_c	4_M_02
+izlude_d,85,103,4	duplicate(Dega_izlude)	데가#izlude_d	4_M_02
+
+izlude,140,186,4	duplicate(Kylick_izlude)	킬릭#izlude	4W_M_01
+izlude_a,140,186,4	duplicate(Kylick_izlude)	킬릭#izlude_a	4W_M_01
+izlude_b,140,186,4	duplicate(Kylick_izlude)	킬릭#izlude_b	4W_M_01
+izlude_c,140,186,4	duplicate(Kylick_izlude)	킬릭#izlude_c	4W_M_01
+izlude_d,140,186,4	duplicate(Kylick_izlude)	킬릭#izlude_d	4W_M_01
+
+izlude,57,159,2	duplicate(Red_izlude)	레드#izlude	4_M_03
+izlude_a,57,159,2	duplicate(Red_izlude)	레드#izlude_a	4_M_03
+izlude_b,57,159,2	duplicate(Red_izlude)	레드#izlude_b	4_M_03
+izlude_c,57,159,2	duplicate(Red_izlude)	레드#izlude_c	4_M_03
+izlude_d,57,159,2	duplicate(Red_izlude)	레드#izlude_d	4_M_03
+
+izlude,55,159,2	duplicate(Cebalis_izlude)	세발리스#izlude	4W_M_02
+izlude_a,55,159,2	duplicate(Cebalis_izlude)	세발리스#izlude_a	4W_M_02
+izlude_b,55,159,2	duplicate(Cebalis_izlude)	세발리스#izlude_b	4W_M_02
+izlude_c,55,159,2	duplicate(Cebalis_izlude)	세발리스#izlude_c	4W_M_02
+izlude_d,55,159,2	duplicate(Cebalis_izlude)	세발리스#izlude_d	4W_M_02
+
+izlude,165,156,2	duplicate(Soldier_izlude)	경비병#izlude	8W_SOLDIER
+izlude_a,165,156,2	duplicate(Soldier_izlude)	경비병#izlude_a	8W_SOLDIER
+izlude_b,165,156,2	duplicate(Soldier_izlude)	경비병#izlude_b	8W_SOLDIER
+izlude_c,165,156,2	duplicate(Soldier_izlude)	경비병#izlude_c	8W_SOLDIER
+izlude_d,165,156,2	duplicate(Soldier_izlude)	경비병#izlude_d	8W_SOLDIER
+
+-	script	::Guard_izlude	-1,{
+	mes "[이즈루드 경비병]";
+	mes "이즈루드에 오신 것을 환영합니다.";
+	close;
+}
+prt_fild08,350,219,4	duplicate(Guard_izlude)	경비병#izlude	8W_SOLDIER
+prt_fild08a,350,219,4	duplicate(Guard_izlude)	경비병#izlude_a	8W_SOLDIER
+prt_fild08b,350,219,4	duplicate(Guard_izlude)	경비병#izlude_b	8W_SOLDIER
+prt_fild08c,350,219,4	duplicate(Guard_izlude)	경비병#izlude_c	8W_SOLDIER
+prt_fild08d,350,219,4	duplicate(Guard_izlude)	경비병#izlude_d	8W_SOLDIER
+
+// Channel Warper :: channel
+//============================================================
+function	script	F_IzludeChannel	{
+	mes "[채널 이동 담당관]";
+	mes "이즈루드는 정말 활기찬 도시죠?";
+	mes "쾌적한 환경을 위해 채널 이동을 도와드리고 있어요.";
+	mes "다른 이즈루드 채널로 이동시켜 드릴 수 있습니다.";
+	mes "다른 채널로 이동하시겠습니까?";
+	next;
+	set .@i, select(getarg(0)+":취소");
+	if (.@i < 6) {
+		setarray .@maps$[1],"izlude","izlude_a","izlude_b","izlude_c","izlude_d";
+		savepoint .@maps$[.@i],128,98,1,1;
+		warp .@maps$[.@i],128,98;
+		end;
+	}
+	close;
+}
+izlude,122,105,5	script	채널 이동 담당관	1_M_WIZARD,{ callfunc "F_IzludeChannel",":2채널로 이동:3채널로 이동:4채널로 이동:5채널로 이동"; }
+izlude_a,122,105,5	script	채널 이동 담당관#_a	1_M_WIZARD,{ callfunc "F_IzludeChannel","1채널로 이동::3채널로 이동:4채널로 이동:5채널로 이동"; }
+izlude_b,122,105,5	script	채널 이동 담당관#_b	1_M_WIZARD,{ callfunc "F_IzludeChannel","1채널로 이동:2채널로 이동::4채널로 이동:5채널로 이동"; }
+izlude_c,122,105,5	script	채널 이동 담당관#_c	1_M_WIZARD,{ callfunc "F_IzludeChannel","1채널로 이동:2채널로 이동:3채널로 이동::5채널로 이동"; }
+izlude_d,122,105,5	script	채널 이동 담당관#_d	1_M_WIZARD,{ callfunc "F_IzludeChannel","1채널로 이동:2채널로 이동:3채널로 이동:4채널로 이동:"; }
+
+// Talking NPCs
+//============================================================
+izlude,143,205,7	script	수다쟁이 꼬마#iz	4_F_KID2,{
+	end;
+
+OnTimer64000:
+	npctalk "수다쟁이 꼬마 : 초보자용 빨간 포션을 다 써버렸어. 어떡하지?";
+	end;
+
+OnTimer72000:
+	npctalk "수다쟁이 꼬마 : 상점은 어디 있지?";
+	end;
+
+OnTimer136000:
+	npctalk "수다쟁이 꼬마 : 에이, '단축창'도 모르는 거야?";
+	end;
+
+OnTimer144000:
+	npctalk "수다쟁이 꼬마 : 인벤토리 아이템은 드래그해서 단축창에 올릴 수 있어.";
+	end;
+
+OnTimer212000:
+	npctalk "수다쟁이 꼬마 : 아카데미에서 초보자 아이템을 엄청 많이 받았어!";
+	end;
+
+OnTimer276000:
+	npctalk "수다쟁이 꼬마 : 무기랑 방패까지 챙겨줬다니까!";
+	end;
+
+OnTimer284000:
+	npctalk "수다쟁이 꼬마 : <Ctrl+~키>를 누르면 지도를 열 수 있어.";
+	end;
+
+OnTimer344000:
+	npctalk "수다쟁이 꼬마 : 그럼 나랑 크리투라 아카데미 갈래? 수비노 선생님한테 전투를 배우고 있어!";
+	end;
+
+OnTimer348000:
+	npctalk "수다쟁이 꼬마 : 아카데미는 이즈루드 북쪽에 있어. 같이 가자~!";
+	end;
+
+OnTimer416000:
+	npctalk "수다쟁이 꼬마 : 목적지까지 안내해 주는 시스템이야.";
+	end;
+
+OnTimer424000:
+	npctalk "수다쟁이 꼬마 : 기본 메뉴에서 [내비게이션] 버튼을 눌러봐.";
+	end;
+
+OnTimer492000:
+	npctalk "수다쟁이 꼬마 : 우와, 머리는 장식이야? 채팅창에 /where를 쳐봐!";
+	end;
+
+OnTimer552000:
+	npctalk "수다쟁이 꼬마 : 이럴 땐 <Enter> 키를 누르면 돼.";
+	end;
+
+OnTimer560000:
+	npctalk "수다쟁이 꼬마 : 우리 지금 같은 말만 반복 중이네. 하하하.";
+	end;
+
+OnTimer565000:
+OnInit:
+	initnpctimer;
+	end;
+}
+
+izlude_a,143,205,7	duplicate(수다쟁이 꼬마#iz)	수다쟁이 꼬마#iza	4_F_KID2
+izlude_b,143,205,7	duplicate(수다쟁이 꼬마#iz)	수다쟁이 꼬마#izb	4_F_KID2
+izlude_c,143,205,7	duplicate(수다쟁이 꼬마#iz)	수다쟁이 꼬마#izc	4_F_KID2
+izlude_d,143,205,7	duplicate(수다쟁이 꼬마#iz)	수다쟁이 꼬마#izd	4_F_KID2
+
+izlude,146,205,7	script	수다쟁이 모험가#iz	4_M_KID1,{
+	end;
+
+OnTimer69000:
+	npctalk "수다쟁이 모험가 : 포션은 상인 NPC에게서 살 수 있어.";
+	end;
+
+OnTimer77000:
+	npctalk "수다쟁이 모험가 : 미니맵에서 포션 모양 아이콘을 찾아봐.";
+	end;
+
+OnTimer131000:
+	npctalk "수다쟁이 모험가 : 아이템을 더 편하게 쓰는 방법 없나?";
+	end;
+
+OnTimer141000:
+	npctalk "수다쟁이 모험가 : 단축창? 화면 위쪽 슬롯 말하는 거야? 어떻게 써?";
+	end;
+
+OnTimer149000:
+	npctalk "수다쟁이 모험가 : 인벤토리면 '아이템' 메뉴 말하는 거지? 아, 맞네!";
+	end;
+
+OnTimer217000:
+	npctalk "수다쟁이 모험가 : 포션이 이렇게나 많아?";
+	end;
+
+OnTimer281000:
+	npctalk "수다쟁이 모험가 : 뭐라고?! 지금 당장 아카데미에 가야겠네!";
+	end;
+
+OnTimer279000:
+	npctalk "수다쟁이 모험가 : 이즈루드는 어디야? 가운데 쪽인가?";
+	end;
+
+OnTimer339000:
+	npctalk "수다쟁이 모험가 : 뭘 해야 할지 모르겠어.";
+	end;
+
+OnTimer349000:
+	npctalk "수다쟁이 모험가 : 오 그래? 나도 궁금한 게 많아~ 같이 갈게!";
+	end;
+
+OnTimer411000:
+	npctalk "수다쟁이 모험가 : 내비게이션? 그게 뭐야?";
+	end;
+
+OnTimer421000:
+	npctalk "수다쟁이 모험가 : 오! 카프라 직원부터 찾아보면 되나?";
+	end;
+
+OnTimer487000:
+	npctalk "수다쟁이 모험가 : 마을 이름이 뭐였지?";
+	end;
+
+OnTimer497000:
+	npctalk "수다쟁이 모험가 : 채팅창에 글 쓰는 칸이 안 보이는데?";
+	end;
+
+OnTimer557000:
+	npctalk "수다쟁이 모험가 : 오, 똑똑하네...";
+	end;
+
+OnTimer555000:
+	npctalk "수다쟁이 모험가 : 아까 어떤 노비스가 날 보자마자 '수다쟁이 모험가!' 라고 부르더라. 하하.";
+	end;
+
+OnTimer565000:
+OnInit:
+	initnpctimer;
+	end;
+}
+
+izlude_a,146,205,7	duplicate(수다쟁이 모험가#iz)	수다쟁이 모험가#iza	4_M_KID1
+izlude_b,146,205,7	duplicate(수다쟁이 모험가#iz)	수다쟁이 모험가#izb	4_M_KID1
+izlude_c,146,205,7	duplicate(수다쟁이 모험가#iz)	수다쟁이 모험가#izc	4_M_KID1
+izlude_d,146,205,7	duplicate(수다쟁이 모험가#iz)	수다쟁이 모험가#izd	4_M_KID1
+
+prt_fild08,338,217,7	script	휴식 중인 모험가#iz	4_F_SITDOWN,{
+	end;
+
+OnTimer60000:
+	npctalk "휴식 중인 모험가 : 앉아 있으면 HP랑 SP가 더 빨리 회복되는 거 알아?";
+	end;
+
+OnTimer65000:
+	npctalk "휴식 중인 모험가 : 기본 직업 스킬 레벨이 3 이상이면 앉을 수 있어. 단축키는 <INSERT> 키야.";
+OnInit:
+	initnpctimer;
+	end;
+}
+
+prt_fild08a,338,217,7	duplicate(휴식 중인 모험가#iz)	휴식 중인 모험가#iza	4_F_SITDOWN
+prt_fild08b,338,217,7	duplicate(휴식 중인 모험가#iz)	휴식 중인 모험가#izb	4_F_SITDOWN
+prt_fild08c,338,217,7	duplicate(휴식 중인 모험가#iz)	휴식 중인 모험가#izc	4_F_SITDOWN
+prt_fild08d,338,217,7	duplicate(휴식 중인 모험가#iz)	휴식 중인 모험가#izd	4_F_SITDOWN
