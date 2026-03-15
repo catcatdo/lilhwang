@@ -1,0 +1,34 @@
+{
+  "updatedAt": "2026-03-15T02:46:00Z",
+  "rules": {
+    "removeOnDelivered": true,
+    "addOnUserProvidedTrackingNo": true,
+    "notifyOnlyOnChange": true
+  },
+  "items": [
+    {
+      "id": "FCIU5944805",
+      "type": "container",
+      "active": true,
+      "source": "manual_restore"
+    },
+    {
+      "id": "CF326PCR3001",
+      "type": "bl",
+      "active": true,
+      "source": "manual_restore"
+    },
+    {
+      "id": "EV070249483CN",
+      "type": "parcel",
+      "active": true,
+      "source": "memory_restore"
+    },
+    {
+      "id": "1Z762E4V0424496485",
+      "type": "parcel",
+      "active": true,
+      "source": "memory_restore"
+    }
+  ]
+}
