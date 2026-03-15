@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T02:46:55Z",
+  "updatedAt": "2026-03-15T04:50:41Z",
   "rules": {
     "removeOnDelivered": true,
     "removeDeliveredFromSheet": true,
@@ -18,18 +18,6 @@
       "type": "bl",
       "active": true,
       "source": "manual_restore"
-    },
-    {
-      "id": "EV070249483CN",
-      "type": "parcel",
-      "active": true,
-      "source": "memory_restore"
-    },
-    {
-      "id": "1Z762E4V0424496485",
-      "type": "parcel",
-      "active": true,
-      "source": "memory_restore"
     },
     {
       "id": "402800006302",
