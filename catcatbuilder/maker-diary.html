@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maker Diary | DIY 프로젝트 50선</title>
+  <meta name="description" content="직접 만들어보는 DIY 프로젝트 아이디어 50개를 기록한 메이커 다이어리">
+  <style>
+    :root {
+      --bg: #f7f7f2;
+      --card: #ffffff;
+      --text: #24331f;
+      --accent: #2f8f46;
+      --muted: #637062;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: linear-gradient(120deg, #f7f7f2 0%, #ecf5e8 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 28px 18px 56px; }
+    .nav {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .nav a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid #b7d8bd;
+      background: #fff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .hero {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 24px rgba(36, 51, 31, 0.08);
+      margin-bottom: 16px;
+    }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    .meta { margin: 0; color: var(--muted); }
+    ol {
+      margin: 0;
+      padding: 22px 26px;
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(36, 51, 31, 0.08);
+      line-height: 1.65;
+    }
+    li { margin: 4px 0; }
+  </style>
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/maker-diary.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Maker Diary | DIY 프로젝트 50선">
+    <meta property="og:description" content="직접 만들어보는 DIY 프로젝트 아이디어 50개를 기록한 메이커 다이어리">
+    <meta property="og:url" content="https://lilhwang.com/maker-diary.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@context":"https://schema.org","@type":"HowTo","name":"Maker Diary 활용 가이드","description":"직접 만들어보는 DIY 프로젝트 아이디어 50개를 기록한 메이커 다이어리","url":"https://lilhwang.com/maker-diary.html","inLanguage":"ko-KR","step":[{"@type":"HowToStep","name":"프로젝트 선택","text":"50개 주제 중 현재 시간과 난이도에 맞는 프로젝트를 고릅니다."},{"@type":"HowToStep","name":"실행 계획","text":"준비물과 작업 순서를 간단히 정리해 진행 계획을 세웁니다."},{"@type":"HowToStep","name":"회고 기록","text":"완료 후 배운 점과 개선점을 기록해 다음 프로젝트 품질을 높입니다."}]}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body>
+  <main class="wrap">
+    <nav class="nav" aria-label="사이트 네비게이션">
+      <a href="index.html">메인 홈</a>
+      <a href="tech-tips.html">Tech Tips로 이동</a>
+      <a href="maker-diary.html">Maker Diary</a>
+    </nav>
+
+    <section class="hero">
+      <h1>DIY 프로젝트 50개 주제</h1>
+      <p id="meta" class="meta">데이터 불러오는 중...</p>
+    </section>
+
+    <ol id="topic-list"></ol>
+  </main>
+
+  <script>
+    async function loadTopics() {
+      try {
+        const response = await fetch('maker-diary.json');
+        if (!response.ok) throw new Error('JSON 로드 실패');
+        const data = await response.json();
+
+        const list = document.getElementById('topic-list');
+        const meta = document.getElementById('meta');
+
+        meta.textContent = `${data.title} | 총 ${data.topics.length}개 | 업데이트: ${data.updatedAt}`;
+        list.innerHTML = data.topics.map((topic) => `<li>${topic}</li>`).join('');
+      } catch (error) {
+        document.getElementById('meta').textContent = '데이터를 불러오지 못했습니다.';
+      }
+    }
+    loadTopics();
+  </script>
+</body>
+</html>

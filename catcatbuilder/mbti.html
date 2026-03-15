@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 동물 유형 테스트 - MBTI 심리테스트 | lilhwang.com</title>
+    <meta name="description" content="20가지 질문으로 알아보는 나의 MBTI 동물 유형! 48종 동물 중 나와 꼭 닮은 동물을 찾아보세요. 무료 성격 심리테스트.">
+    <meta name="keywords" content="MBTI 테스트, 동물 유형, 심리테스트, 성격 테스트, MBTI 동물, 무료 심리테스트">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="나의 동물 유형 테스트 - MBTI 심리테스트 | lilhwang.com">
+    <meta name="twitter:description" content="20가지 질문으로 알아보는 나의 MBTI 동물 유형! 48종 동물 중 나와 꼭 닮은 동물을 찾아보세요.">
+    <meta name="twitter:image" content="https://lilhwang.com/images/og-default.jpg">
+
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme-preference') || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9087208932507444"
+     crossorigin="anonymous"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "나의 동물 유형 테스트 - MBTI 심리테스트",
+        "url": "https://lilhwang.com/mbti.html",
+        "description": "20가지 질문으로 알아보는 나의 MBTI 동물 유형. 48종 동물 중 나와 꼭 닮은 동물을 찾아보세요.",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "KRW"
+        },
+        "inLanguage": "ko-KR"
+    }
+    </script>
+
+    <style>
+        .mbti-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Start Screen */
+        .start-screen {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .start-emoji {
+            font-size: 80px;
+            display: block;
+            margin-bottom: 20px;
+            animation: bounce 2s ease infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .start-screen h1 {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            color: var(--text-primary, #2c3e50);
+        }
+        .start-screen .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary, #7f8c8d);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .start-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .start-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary, #95a5a6);
+        }
+        .start-info-item svg {
+            opacity: 0.6;
+        }
+        .btn-start {
+            display: inline-block;
+            padding: 16px 48px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .animal-preview {
+            margin-top: 40px;
+            font-size: 32px;
+            letter-spacing: 8px;
+            opacity: 0.7;
+        }
+
+        /* Question Screen */
+        .question-screen {
+            display: none;
+            padding: 30px 0;
+        }
+        .progress-wrap {
+            margin-bottom: 30px;
+        }
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-secondary, #95a5a6);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary, #ecf0f1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+        .question-card {
+            background: var(--bg-primary, #fff);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-number {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .question-dimension {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: var(--text-primary, #2c3e50);
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        .answer-btn {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            line-height: 1.5;
+            text-align: left;
+            color: var(--text-primary, #2c3e50);
+            background: var(--bg-secondary, #f8f9fa);
+            border: 2px solid var(--border-color, #e9ecef);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .answer-btn:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateX(4px);
+        }
+        .answer-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Result Screen */
+        .result-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeIn 0.6s ease;
+        }
+        .result-animal-emoji {
+            font-size: 100px;
+            display: block;
+            margin-bottom: 16px;
+            animation: popIn 0.6s ease;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .result-animal-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        .result-animal-title {
+            font-size: 1.1rem;
+            color: var(--text-secondary, #7f8c8d);
+            margin-bottom: 24px;
+        }
+        .result-mbti-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50px;
+            margin-bottom: 8px;
+        }
+        .result-mbti-title {
+            font-size: 1rem;
+            color: var(--text-secondary, #7f8c8d);
+            margin-bottom: 30px;
+        }
+        .result-card {
+            background: var(--bg-primary, #fff);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: left;
+            margin-bottom: 24px;
+        }
+        .result-card h3 {
+            font-size: 1.1rem;
+            color: var(--text-primary, #2c3e50);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+        }
+        .result-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-primary, #34495e);
+        }
+        .result-traits {
+            list-style: none;
+            padding: 0;
+        }
+        .result-traits li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color, #f0f0f0);
+            font-size: 0.95rem;
+            color: var(--text-primary, #34495e);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .result-traits li:last-child {
+            border-bottom: none;
+        }
+        .trait-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .result-compat {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .compat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 20px;
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+        }
+        .result-dimensions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .dimension-item {
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--bg-secondary, #f8f9fa);
+        }
+        .dimension-label {
+            font-size: 12px;
+            color: var(--text-secondary, #95a5a6);
+            margin-bottom: 6px;
+        }
+        .dimension-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .dimension-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+        .dimension-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary, #2c3e50);
+            margin-top: 4px;
+        }
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .btn-retry {
+            padding: 12px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #667eea;
+            background: transparent;
+            border: 2px solid #667eea;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-retry:hover {
+            background: #667eea;
+            color: #fff;
+        }
+        .btn-share {
+            padding: 12px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-share:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .share-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #2c3e50;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 9999;
+        }
+        .share-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* All Animals Section */
+        .all-animals-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .all-animals-toggle {
+            padding: 10px 24px;
+            font-size: 14px;
+            color: var(--text-secondary, #7f8c8d);
+            background: var(--bg-secondary, #f8f9fa);
+            border: 1px solid var(--border-color, #e0e0e0);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .all-animals-toggle:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        .all-animals-grid {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .all-animals-grid.show {
+            display: grid;
+        }
+        .animal-mini-card {
+            padding: 16px 8px;
+            background: var(--bg-primary, #fff);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+        .animal-mini-card:hover {
+            transform: translateY(-2px);
+        }
+        .animal-mini-card .emoji {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .animal-mini-card .name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary, #2c3e50);
+        }
+        .animal-mini-card .type {
+            font-size: 11px;
+            color: #667eea;
+            margin-top: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mbti-container { padding: 12px; }
+            .start-screen { padding: 40px 12px; }
+            .start-emoji { font-size: 60px; }
+            .start-screen h1 { font-size: 1.6rem; }
+            .start-info { gap: 16px; }
+            .question-card { padding: 24px 18px; }
+            .question-text { font-size: 1.1rem; }
+            .answer-btn { padding: 14px 18px; font-size: 0.95rem; }
+            .result-animal-emoji { font-size: 72px; }
+            .result-dimensions { grid-template-columns: 1fr; }
+            .result-actions { flex-direction: column; align-items: center; }
+            .all-animals-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+        }
+        @media (max-width: 480px) {
+            .start-screen h1 { font-size: 1.3rem; }
+            .start-info { flex-direction: column; align-items: center; gap: 8px; }
+            .btn-start { padding: 14px 36px; font-size: 1rem; }
+            .question-card { padding: 20px 14px; border-radius: 12px; }
+            .question-text { font-size: 1rem; }
+            .animal-preview { font-size: 24px; letter-spacing: 4px; }
+        }
+    </style>
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/mbti.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="나의 동물 유형 테스트 - MBTI 심리테스트 | lilhwang.com">
+    <meta property="og:description" content="20가지 질문으로 알아보는 나의 MBTI 동물 유형! 48종 동물 중 나와 꼭 닮은 동물을 찾아보세요. 무료 성격 심리테스트.">
+    <meta property="og:url" content="https://lilhwang.com/mbti.html">
+    <meta property="og:image" content="https://lilhwang.com/images/og-default.jpg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/mbti.html"},"headline":"나의 동물 유형 테스트 - MBTI 심리테스트 | lilhwang.com","description":"20가지 질문으로 알아보는 나의 MBTI 동물 유형! 48종 동물 중 나와 꼭 닮은 동물을 찾아보세요. 무료 성격 심리테스트.","url":"https://lilhwang.com/mbti.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">lilhwang<span class="logo-dot">.</span>com</a></h1>
+            <nav class="nav">
+                <a href="tests.html">심리테스트</a>
+                <a href="index.html">도구</a>
+                <a href="blog.html">블로그</a>
+                <a href="issues.html">이슈</a>
+                <a href="templates.html">템플릿</a>
+                <a href="about.html">소개</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main-container">
+        <div class="mbti-container">
+
+            <!-- Start Screen -->
+            <div id="start-screen" class="start-screen">
+                <span class="start-emoji">🐾</span>
+                <h1>나의 동물 유형은?</h1>
+                <p class="subtitle">20가지 심리 질문으로 알아보는<br>나와 꼭 닮은 동물 MBTI</p>
+                <div class="start-info">
+                    <span class="start-info-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        약 3~5분
+                    </span>
+                    <span class="start-info-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        20문항
+                    </span>
+                    <span class="start-info-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/></svg>
+                        48종 동물
+                    </span>
+                </div>
+                <button class="btn-start" id="btn-start">테스트 시작하기</button>
+                <div class="animal-preview">
+                    🦉🐱🦁🦊🐺🦌🐘🦦🐢🐼🐻🐕🐆🐨🐎🐒
+                </div>
+            </div>
+
+            <!-- Question Screen -->
+            <div id="question-screen" class="question-screen">
+                <div class="progress-wrap">
+                    <div class="progress-info">
+                        <span id="progress-text">Q1 / 20</span>
+                        <span id="progress-pct">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="question-card" id="question-card">
+                    <div>
+                        <span class="question-number" id="q-number">Q1</span>
+                        <span class="question-dimension" id="q-dimension"></span>
+                    </div>
+                    <p class="question-text" id="q-text"></p>
+                    <button class="answer-btn" id="answer-a"></button>
+                    <button class="answer-btn" id="answer-b"></button>
+                </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div id="result-screen" class="result-screen">
+                <span class="result-animal-emoji" id="result-emoji"></span>
+                <div class="result-animal-name" id="result-animal-name"></div>
+                <div class="result-animal-title" id="result-animal-title"></div>
+                <div class="result-mbti-badge" id="result-mbti"></div>
+                <div class="result-mbti-title" id="result-mbti-title"></div>
+
+                <div class="result-card">
+                    <h3>나의 성격 분석</h3>
+                    <p class="result-description" id="result-description"></p>
+                </div>
+
+                <div class="result-card">
+                    <h3>나의 MBTI 차원</h3>
+                    <div class="result-dimensions" id="result-dimensions"></div>
+                </div>
+
+                <div class="result-card">
+                    <h3>핵심 특성</h3>
+                    <ul class="result-traits" id="result-traits"></ul>
+                </div>
+
+                <div class="result-card">
+                    <h3>찰떡궁합 동물</h3>
+                    <div class="result-compat" id="result-compat"></div>
+                </div>
+
+                <div class="result-card">
+                    <h3>한마디 조언</h3>
+                    <p class="result-description" id="result-advice"></p>
+                </div>
+
+                <div class="result-actions">
+                    <button class="btn-retry" id="btn-retry">다시 테스트하기</button>
+                    <button class="btn-share" id="btn-share">결과 공유하기</button>
+                </div>
+
+                <!-- All 48 Animals -->
+                <div class="all-animals-section">
+                    <button class="all-animals-toggle" id="all-animals-toggle">48종 전체 동물 보기</button>
+                    <div class="all-animals-grid" id="all-animals-grid"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 lilhwang.com. All rights reserved.</p>
+            <p class="footer-links">
+                <a href="about.html">소개</a> |
+                <a href="contact.html">연락처</a> |
+                <a href="privacy.html">개인정보처리방침</a> |
+                <a href="terms.html">이용약관</a>
+            </p>
+        </div>
+    </footer>
+
+    <div class="share-toast" id="share-toast">링크가 복사되었습니다!</div>
+
+    <script src="mbti.js"></script>
+</body>
+</html>

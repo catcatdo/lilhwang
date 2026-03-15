@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시놀로지 NAS DSM 7.0 Docker 마인크래프트 서버 만들기 (포트포워딩까지) | 릴황 블로그</title>
+    <meta name="description" content="DSM 7.0에서 Docker로 마인크래프트 서버 여는 방법. 준비물/가격, 공유기 포트포워딩, 보안/메모리/백업 주의사항, 실패 경험까지 한 번에 정리">
+    <link rel="stylesheet" href="blog.css">
+
+    <link rel="canonical" href="https://lilhwang.com/post-synology-minecraft-dsm7-docker-20260224.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="시놀로지 NAS DSM 7.0 Docker 마인크래프트 서버 만들기 (포트포워딩까지)">
+    <meta property="og:description" content="DSM 7.0에서 Docker로 마인크래프트 서버 여는 방법을 단계별로 설명합니다.">
+    <meta property="og:url" content="https://lilhwang.com/post-synology-minecraft-dsm7-docker-20260224.html">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+</head>
+<body>
+    <article class="blog-post">
+        <header class="post-header">
+            <h1>시놀로지 NAS DSM 7.0 Docker로 마인크래프트 서버 만들기</h1>
+            <div class="post-meta">
+                <span class="date">2026-02-24</span>
+                <span class="category">기술</span>
+                <span class="author">릴황</span>
+            </div>
+        </header>
+
+        <div class="post-content">
+            <p>안녕하세요! 오늘은 시놀로지 나스로 마인크래프트 서버 직접 열어보는 글이야. DSM 7.0 기준으로 진행할 거고, Docker(신형 DSM에서는 Container Manager로 이름이 보일 수도 있어)로 구성할 거야. 그럼 시작핸보자.</p>
+
+            <h2>먼저 준비물부터 체크 (대략 가격 포함)</h2>
+            <p>내가 실제로 준비했던 기준으로 적어볼게. 가격은 2026년 2월 기준 대략값이라 판매처에 따라 달라질 수 있어.</p>
+            <ul>
+                <li>시놀로지 NAS 본체 (플러스 모델 권장): 약 45만~120만원</li>
+                <li>NAS용 HDD 2개 (예: 4TB x 2): 약 28만~40만원</li>
+                <li>추가 RAM 8GB~16GB 권장: 약 4만~12만원</li>
+                <li>기가비트 공유기: 약 5만~20만원</li>
+                <li>마인크래프트 Java Edition 계정: 약 4만원대</li>
+                <li>전기요금(24시간 구동 시): 월 약 5천원~1만5천원 수준(모델/요금제 따라 차이)</li>
+            </ul>
+
+            <p>최소 구성으로 시작하면 약 80만원대도 가능하고, 여유 있게 구성하면 150만원 이상도 나와. 친구 3~5명 소규모 서버면 CPU보다 RAM 체감이 훨씬 큰 편이었어.</p>
+
+            <h2>Step 1. DSM 7.0에서 Docker 패키지 설치</h2>
+            <p>패키지 센터에서 <strong>Docker</strong>를 설치해줘. 만약 모델/DSM 버전에 따라 <strong>Container Manager</strong>로 보이면 그걸 설치하면 돼. 핵심은 컨테이너를 실행할 수 있으면 된다.</p>
+            <p>설치가 끝나면 공유 폴더를 하나 만들어서 서버 데이터를 보관하자. 예시 경로는 아래처럼:</p>
+            <pre><code>/volume1/docker/minecraft</code></pre>
+            <p>여기에 월드 데이터, 설정 파일이 저장되니까 나중에 백업/복구가 쉬워져.</p>
+
+            <h2>Step 2. 마인크래프트 컨테이너 생성</h2>
+            <p>초보면 UI(컨테이너 생성 마법사)로 해도 되고, 나는 재현이 쉬운 compose 방식을 추천해. 아래 예시로 시작하면 가장 안정적이었어.</p>
+            <pre><code>services:
+  minecraft:
+    image: itzg/minecraft-server:latest
+    container_name: mc-server
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "LATEST"
+      MEMORY: "4G"
+      TZ: "Asia/Seoul"
+    volumes:
+      - /volume1/docker/minecraft/data:/data
+    restart: unless-stopped</code></pre>
+            <p>핵심은 4개야. <code>EULA=TRUE</code>, 포트 <code>25565</code> 매핑, <code>/data</code> 볼륨, 메모리 제한.</p>
+
+            <h2>Step 3. DSM 방화벽/보안 설정</h2>
+            <p>여기 꼭 해줘야 해. 열어야 할 건 최소한만 열고, 관리자 계정은 비활성화 또는 이름 변경 권장.</p>
+            <ul>
+                <li>DSM 방화벽에서 Minecraft TCP 25565 허용</li>
+                <li>DSM 관리 포트(5000/5001)는 외부 공개 금지</li>
+                <li>2단계 인증(2FA) 활성화</li>
+                <li>자동 차단(로그인 실패 횟수 제한) 활성화</li>
+            </ul>
+
+            <h2>Step 4. 공유기 포트포워딩 설정</h2>
+            <p>공유기 관리자 페이지에 접속해서 포트포워딩을 추가해.</p>
+            <ul>
+                <li>외부 포트: 25565</li>
+                <li>내부 IP: NAS 고정 IP (예: 192.168.0.20)</li>
+                <li>내부 포트: 25565</li>
+                <li>프로토콜: TCP (일부 공유기는 TCP/UDP 같이 열어도 됨)</li>
+            </ul>
+            <p>그리고 NAS 내부 IP는 DHCP 예약으로 고정해. 이거 안 하면 어느 날 IP가 바뀌고 서버가 갑자기 안 열릴 수 있어.</p>
+
+            <h2>Step 5. 외부 접속 테스트</h2>
+            <p>같은 와이파이 말고 LTE/5G에서 테스트해야 정확해. 접속 주소는 <code>공인IP:25565</code> 또는 DDNS를 쓴다면 <code>도메인:25565</code>로 접속.</p>
+            <p>친구에게 접속 시도 부탁해서 플레이어 입장 로그까지 확인하면 완료!</p>
+
+            <h2>내가 겪었던 실패 경험 (진짜 자주 터지는 것들)</h2>
+            <p><strong>실패 1: 포트는 열었는데 접속 불가</strong><br>
+            원인: NAS IP가 바뀜. 해결: DHCP 예약으로 NAS IP 고정.</p>
+
+            <p><strong>실패 2: 서버는 켜지는데 렉 심함</strong><br>
+            원인: 메모리 부족 + 월드 청크 과다. 해결: MEMORY 4G 이상, 뷰 디스턴스 조정, 불필요 플러그인 정리.</p>
+
+            <p><strong>실패 3: 업데이트 후 월드 깨짐</strong><br>
+            원인: 백업 없이 버전 변경. 해결: 업데이트 전 <code>/data</code> 폴더 스냅샷/백업 후 진행.</p>
+
+            <h2>운영할 때 꼭 지켜야 할 주의점</h2>
+            <ul>
+                <li>보안: DSM 관리자 포트 외부 노출 금지, 마크 포트만 개방</li>
+                <li>메모리: 2~3명은 2G도 가능하지만, 4명 이상이면 4G 이상 권장</li>
+                <li>백업: 최소 주 1회 월드 자동 백업 + 업데이트 전 수동 백업</li>
+                <li>재시작: 매일 새벽 자동 재시작 걸어두면 장시간 운영 안정성에 도움</li>
+            </ul>
+
+            <h2>마무리</h2>
+            <p>요약하면, DSM 7.0에서 Docker로 여는 건 생각보다 어렵지 않아. 핵심은 포트포워딩 정확히, NAS IP 고정, 그리고 백업 습관이야. 이 3개만 지켜도 스트레스가 확 줄어.</p>
+            <p>설정하다가 막히는 구간(공유기 모델별 화면, DDNS, 플러그인 추천)이 있으면 댓글로 남겨줘. 쓰는 NAS 모델/공유기 모델 같이 적어주면 내가 최대한 맞춰서 답변해볼게!</p>
+        </div>
+
+        <footer class="post-footer">
+            <div class="tags">
+                <span class="tag">시놀로지</span>
+                <span class="tag">DSM7</span>
+                <span class="tag">Docker</span>
+                <span class="tag">마인크래프트서버</span>
+                <span class="tag">포트포워딩</span>
+            </div>
+        </footer>
+    </article>
+</body>
+</html>

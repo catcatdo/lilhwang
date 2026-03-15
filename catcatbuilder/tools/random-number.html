@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>랜덤 숫자 생성기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tool-theme.css">
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/tools/random-number.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="랜덤 숫자 생성기">
+    <meta property="og:description" content="홈 도구 스테이션 랜덤 숫자 생성기 최소~최대 범위에서 랜덤 정수를 생성합니다. 최소값 최대값 생성 -">
+    <meta property="og:url" content="https://lilhwang.com/tools/random-number.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/tools/random-number.html"},"headline":"랜덤 숫자 생성기","description":"홈 도구 스테이션 랜덤 숫자 생성기 최소~최대 범위에서 랜덤 정수를 생성합니다. 최소값 최대값 생성 -","url":"https://lilhwang.com/tools/random-number.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body>
+  <main class="wrap">
+    <header class="site-header">
+      <nav class="site-nav">
+        <a href="../index.html">홈</a>
+        <a href="../developer-tools.html" aria-current="page">도구 스테이션</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <h1>랜덤 숫자 생성기</h1>
+      <p>최소~최대 범위에서 랜덤 정수를 생성합니다.</p>
+    </section>
+    <section class="panel form-grid">
+      <div class="form-row two">
+        <div>
+          <label for="min">최소값</label>
+          <input id="min" type="number" value="1">
+        </div>
+        <div>
+          <label for="max">최대값</label>
+          <input id="max" type="number" value="100">
+        </div>
+      </div>
+      <div class="button-row">
+        <button id="gen">생성</button>
+      </div>
+      <div id="out" class="stat">-</div>
+    </section>
+  </main>
+  <script>
+    const minEl = document.getElementById('min');
+    const maxEl = document.getElementById('max');
+    const genBtn = document.getElementById('gen');
+    const outEl = document.getElementById('out');
+
+    genBtn.addEventListener('click', () => {
+      const min = Number(minEl.value);
+      const max = Number(maxEl.value);
+      if (min > max) {
+        outEl.textContent = '범위 오류';
+        return;
+      }
+      outEl.textContent = String(Math.floor(Math.random() * (max - min + 1)) + min);
+    });
+  </script>
+</body>
+</html>

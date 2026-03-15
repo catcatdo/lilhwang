@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글쓰기 도우미 | 릴황 유틸리티</title>
+    <meta name="description" content="키워드 기반 제목 아이디어와 3문장 요약을 생성하는 글쓰기 도우미입니다.">
+    <meta name="keywords" content="글쓰기 도우미, 제목 생성, 요약, 개발 블로그">
+    <meta name="author" content="lilhwang">
+    <meta name="robots" content="index, follow">
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="글쓰기 도우미 | 릴황 유틸리티">
+    <meta name="twitter:description" content="키워드 기반 제목 아이디어와 3문장 요약을 생성하는 글쓰기 도우미입니다.">
+    <meta name="twitter:image" content="https://lilhwang.com/images/og-default.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "글쓰기 도우미",
+        "url": "https://lilhwang.com/writing-helper.html",
+        "description": "키워드 기반 제목 아이디어와 3문장 요약을 생성하는 글쓰기 도우미입니다.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any"
+    }
+    </script>
+    <script>
+        (function () {
+            try {
+                var key = 'theme-preference';
+                var saved = localStorage.getItem(key);
+                var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = saved || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (error) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9087208932507444"
+     crossorigin="anonymous"></script>
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/writing-helper.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="글쓰기 도우미 | 릴황 유틸리티">
+    <meta property="og:description" content="키워드 기반 제목 아이디어와 3문장 요약을 생성하는 글쓰기 도우미입니다.">
+    <meta property="og:url" content="https://lilhwang.com/writing-helper.html">
+    <meta property="og:image" content="https://lilhwang.com/images/og-default.jpg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/writing-helper.html"},"headline":"글쓰기 도우미 | 릴황 유틸리티","description":"키워드 기반 제목 아이디어와 3문장 요약을 생성하는 글쓰기 도우미입니다.","url":"https://lilhwang.com/writing-helper.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body data-keywords="글쓰기,요약,제목,콘텐츠,블로그" data-category="dev">
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">lilhwang.com</h1>
+            <div class="header-actions">
+                <nav class="nav">
+                    <a href="index.html">홈</a>
+                    <a href="blog.html">블로그</a>
+                    <a href="issues.html">이슈</a>
+                    <a href="resource-center.html">정보허브</a>
+                    <a href="update-log.html">업데이트</a>
+                    <a href="editorial-policy.html">편집정책</a>
+                </nav>
+                <button class="theme-toggle" id="theme-toggle" type="button" aria-label="다크 모드 전환">
+                    <span class="theme-icon" aria-hidden="true">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="container">
+            <h2 class="section-heading">글쓰기 도우미</h2>
+            <p class="section-description">키워드로 제목 아이디어를 만들고, 글을 3문장으로 요약해보세요.</p>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3 class="tool-title">글쓰기 도우미</h3>
+                    <div class="tool-body">
+                        <div class="input-group">
+                            <label for="title-keywords">키워드 (쉼표로 구분)</label>
+                            <input type="text" id="title-keywords" placeholder="예: React, 성능, 최적화">
+                        </div>
+                        <div class="tool-actions">
+                            <button class="btn btn-primary" id="generate-titles">제목 아이디어 생성</button>
+                            <a class="btn btn-secondary" href="developer-tools.html">도구 모음</a>
+                        </div>
+                        <ul id="title-suggestions" class="tool-list"></ul>
+                        <textarea id="summary-input" class="tool-textarea" rows="6" placeholder="요약할 글을 붙여넣으세요"></textarea>
+                        <button class="btn btn-secondary" id="generate-summary">3문장 요약</button>
+                        <pre id="summary-output" class="tool-output"></pre>
+                    </div>
+                </div>
+            </div>
+            <h3 class="subsection-title">관련 블로그 글</h3>
+            <div class="input-group input-inline">
+                <label for="related-keywords-input">관련 키워드</label>
+                <input type="text" id="related-keywords-input" placeholder="키워드 쉼표 구분">
+                <button class="btn btn-secondary" id="related-keywords-save">저장</button>
+                <button class="btn btn-secondary" id="related-keywords-clear">초기화</button>
+            </div>
+            <div id="related-keywords-status" class="small-note"></div>
+            <div id="related-keywords-suggest" class="keyword-chips"></div>
+            <ul id="related-posts" class="tool-list"></ul>
+
+            <h3 class="subsection-title">FAQ</h3>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-q">제목 아이디어는 어떻게 생성되나요?</div>
+                    <div class="faq-a">키워드 기반 템플릿으로 간단한 아이디어를 제시합니다.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">요약은 어떤 방식인가요?</div>
+                    <div class="faq-a">입력한 글의 앞부분에서 3문장을 추려 요약합니다.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">입력 내용은 저장되나요?</div>
+                    <div class="faq-a">아니요. 브라우저에서만 처리됩니다.</div>
+                </div>
+            
+            <h3 class="subsection-title">이용 가이드 & 정책</h3>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-q">이 도구는 어떤 환경에서 동작하나요?</div>
+                    <div class="faq-a">최신 Chrome, Edge, Safari, Firefox 브라우저에서 동작하며 모바일에서도 사용 가능합니다.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">입력한 데이터는 어떻게 처리되나요?</div>
+                    <div class="faq-a">기본적으로 브라우저 내 처리 원칙을 따르며, 자세한 정책은 개인정보처리방침과 편집정책 문서를 참고해 주세요.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">콘텐츠/도구 변경 내역은 어디서 보나요?</div>
+                    <div class="faq-a"><a href="update-log.html">콘텐츠 업데이트 로그</a>에서 최근 변경사항을 확인할 수 있습니다.</div>
+                </div>
+            </div>
+            <p class="small-note" style="margin-top:12px;">최종 수정일: 2026-02-13</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 lilhwang.com. All rights reserved.</p>
+            <p class="footer-links">
+                <a href="about.html">소개</a> |
+                <a href="resource-center.html">정보허브</a> |
+                <a href="update-log.html">업데이트</a> |
+                <a href="editorial-policy.html">편집정책</a> |
+                <a href="contact.html">연락처</a> |
+                <a href="privacy.html">개인정보처리방침</a> |
+                <a href="terms.html">이용약관</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

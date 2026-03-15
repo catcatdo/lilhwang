@@ -1,0 +1,1202 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>블로그 | catcatbuilder</title>
+  <meta name="description" content="posts.json 기반 카드형 블로그 목록과 상세 보기">
+  <meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #edf4f8;
+      --surface: #ffffff;
+      --line: #cfe0e9;
+      --text: #13222d;
+      --muted: #507182;
+      --blue: #0f6fbb;
+      --blue-soft: #e5f1fb;
+      --green: #0f9d81;
+      --green-soft: #dff7f1;
+      --chip: #f4f9fc;
+      --max: 1120px;
+      --radius: 16px;
+      --shadow: 0 12px 30px rgba(11, 35, 51, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Space Grotesk", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(15, 111, 187, 0.14), transparent 38%),
+        radial-gradient(circle at 5% 90%, rgba(15, 157, 129, 0.12), transparent 40%),
+        var(--bg);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 22px 16px 72px;
+    }
+
+    .nav-shell {
+      position: sticky;
+      top: 8px;
+      z-index: 30;
+      margin-bottom: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      padding: 10px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav a {
+      text-decoration: none;
+      border: 1px solid var(--line);
+      background: #f8fbfd;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 7px 12px;
+      transition: 0.2s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      border-color: #95c0de;
+      color: #0c609f;
+      background: var(--blue-soft);
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #f6fcff 0%, #ffffff 100%);
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 3vw, 28px);
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3.8vw, 2.5rem);
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+      font-size: 0.95rem;
+    }
+
+    .toolbar {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      margin-top: 14px;
+      padding: 14px;
+    }
+
+    .search-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      margin-top: 14px;
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .search-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      align-items: end;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid #bdd6e4;
+      border-radius: 10px;
+      background: #fbfeff;
+      color: #173444;
+      font: inherit;
+      font-size: 0.9rem;
+      padding: 9px 10px;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: 2px solid #d0e9f8;
+      border-color: #7eb4d1;
+    }
+
+    .history {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .history-title {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-right: 2px;
+    }
+
+    .history button {
+      border: 1px solid #c8dce8;
+      background: #f3f9fd;
+      border-radius: 999px;
+      color: #194963;
+      font: inherit;
+      font-size: 0.78rem;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .history .clear-history {
+      border-color: #e3b2b2;
+      background: #fff5f5;
+      color: #8a2e2e;
+    }
+
+    .toolbar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .filter-toggle {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #f4f9fc;
+      color: #244756;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .toolbar-body {
+      margin-top: 10px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--chip);
+      color: #244756;
+      font: inherit;
+      font-size: 0.82rem;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .chip:hover {
+      border-color: #a4c8d7;
+      background: #ecf7fb;
+    }
+
+    .chip.active {
+      border-color: #7dc9b8;
+      background: var(--green-soft);
+      color: #0b6f59;
+      font-weight: 600;
+    }
+
+    .status,
+    .empty {
+      border: 1px dashed #b6cedb;
+      border-radius: var(--radius);
+      background: #f8fcff;
+      color: var(--muted);
+      text-align: center;
+      padding: 22px;
+    }
+
+    .status strong,
+    .empty strong {
+      color: #123c55;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .list-view {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+
+    .post-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      display: grid;
+      grid-template-rows: 190px auto;
+      transition: transform 0.16s ease, border-color 0.16s ease;
+    }
+
+    .post-card:hover {
+      transform: translateY(-2px);
+      border-color: #9cc8db;
+    }
+
+    .thumb {
+      position: relative;
+      background: linear-gradient(135deg, #e5f4fb, #e8faf5);
+      overflow: hidden;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      border-radius: 999px;
+      background: rgba(10, 43, 64, 0.78);
+      color: #f4fbff;
+      font-size: 0.74rem;
+      padding: 4px 9px;
+      letter-spacing: 0.01em;
+    }
+
+    .post-body {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .post-title {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .excerpt {
+      margin: 0;
+      color: #314c5b;
+      font-size: 0.89rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .tag-list {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      border-radius: 999px;
+      border: 1px solid #c5ddea;
+      background: #f2f9fd;
+      color: #1e5a77;
+      font-size: 0.74rem;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+
+    mark.hl {
+      background: #fff1a8;
+      color: #5b4700;
+      border-radius: 4px;
+      padding: 0 2px;
+    }
+
+    .detail-view[hidden],
+    .list-wrap[hidden] {
+      display: none;
+    }
+
+    .detail-view {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .detail-head {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #f9fcff;
+    }
+
+    .back-btn {
+      border: 1px solid #9bc4de;
+      border-radius: 999px;
+      background: #e9f4fd;
+      color: #0f629f;
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 7px 12px;
+      cursor: pointer;
+    }
+
+    .detail-meta {
+      color: var(--muted);
+      font-size: 0.82rem;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .detail-content {
+      padding: 18px;
+    }
+
+    .detail-cover {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      margin: 0 0 14px;
+      background: linear-gradient(135deg, #e5f4fb, #e8faf5);
+      overflow: hidden;
+    }
+
+    .detail-cover img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .detail-title {
+      margin: 0 0 10px;
+      font-size: clamp(1.3rem, 2.8vw, 2rem);
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .detail-tags span {
+      border-radius: 999px;
+      border: 1px solid #c7deea;
+      background: #f2f9fd;
+      color: #1d5672;
+      font-size: 0.78rem;
+      padding: 4px 9px;
+    }
+
+    .detail-body {
+      color: #1a3242;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-body h1,
+    .detail-body h2,
+    .detail-body h3,
+    .detail-body h4 {
+      margin: 22px 0 8px;
+      color: #0f3850;
+      line-height: 1.35;
+    }
+
+    .detail-body p {
+      margin: 0 0 12px;
+    }
+
+    .detail-body ul,
+    .detail-body ol {
+      margin: 0 0 14px 20px;
+      padding: 0;
+    }
+
+    .detail-body hr {
+      border: 0;
+      border-top: 1px solid #dde9f0;
+      margin: 16px 0;
+    }
+
+    .detail-body pre {
+      margin: 0 0 14px;
+      border: 1px solid #c7dce8;
+      border-radius: 10px;
+      background: #f2f8fc;
+      padding: 12px;
+      overflow: auto;
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .detail-body code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .detail-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 0.86rem;
+    }
+
+    .detail-body th,
+    .detail-body td {
+      border: 1px solid #d2e2eb;
+      padding: 7px;
+      text-align: left;
+    }
+
+    .comments-box {
+      border-top: 1px solid var(--line);
+      margin-top: 24px;
+      padding-top: 16px;
+    }
+
+    @media (min-width: 760px) {
+      .list-view {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1040px) {
+      .list-view {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .search-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .post-card {
+        grid-template-rows: 200px auto;
+      }
+
+      .excerpt {
+        -webkit-line-clamp: 4;
+      }
+
+      .detail-content {
+        padding: 14px;
+      }
+    }
+  </style>
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/blog.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="블로그 | catcatbuilder">
+    <meta property="og:description" content="catcatbuilder 최신 글을 카드형으로 탐색하고 태그 필터와 상세 보기로 확인하는 개발 블로그">
+    <meta property="og:url" content="https://lilhwang.com/blog.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@context":"https://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/blog.html"},"headline":"블로그 | catcatbuilder","description":"catcatbuilder 최신 글을 카드형으로 탐색하고 태그 필터와 상세 보기로 확인하는 개발 블로그","url":"https://lilhwang.com/blog.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"},"dateModified":"2026-02-23"}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body>
+  <main class="wrap">
+    <header class="nav-shell">
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="index.html">홈</a>
+        <a href="issues.html" target="_blank" rel="noopener noreferrer">이슈</a>
+        <a href="blog.html" class="active" aria-current="page">블로그</a>
+        <a href="developer-tools.html">도구</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>개발 블로그</h1>
+      <p>`posts.json`에서 글을 불러와 카드형으로 보여줍니다. 태그 필터와 상세 보기, 댓글까지 한 화면에서 확인할 수 있습니다.</p>
+    </section>
+
+    <section class="list-wrap" id="listWrap">
+      <section id="statusBox" class="status" aria-live="polite" hidden></section>
+      <section class="search-panel" aria-label="고급 검색">
+        <div class="search-grid">
+          <div class="field">
+            <label for="searchInput">실시간 검색 (제목/내용/태그)</label>
+            <input id="searchInput" type="search" placeholder="예: docker, github actions" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="dateFromInput">시작일</label>
+            <input id="dateFromInput" type="date">
+          </div>
+          <div class="field">
+            <label for="dateToInput">종료일</label>
+            <input id="dateToInput" type="date">
+          </div>
+          <div class="field">
+            <label for="categorySelect">카테고리</label>
+            <select id="categorySelect">
+              <option value="ALL">전체</option>
+            </select>
+          </div>
+        </div>
+        <div class="history" id="searchHistory" aria-live="polite"></div>
+      </section>
+
+      <section id="postList" class="list-view" aria-live="polite"></section>
+
+      <section class="toolbar" aria-label="태그 필터">
+        <div class="toolbar-head">
+          <button class="filter-toggle" type="button" id="tagFilterToggle" aria-expanded="false" aria-controls="tagFilterBody">태그 필터 ▼</button>
+          <strong id="resultCount">0개 글</strong>
+        </div>
+        <div class="toolbar-body" id="tagFilterBody" hidden>
+          <div class="chips" id="tagChips"></div>
+        </div>
+      </section>
+    </section>
+
+    <article class="detail-view" id="detailView" hidden>
+      <header class="detail-head">
+        <button class="back-btn" type="button" id="backToList">목록으로</button>
+        <div class="detail-meta" id="detailMeta"></div>
+      </header>
+      <div class="detail-content" id="detailContent"></div>
+    </article>
+  </main>
+
+  <script>
+    const state = {
+      posts: [],
+      filteredPosts: [],
+      activeTag: "ALL",
+      isTagFilterOpen: false,
+      searchQuery: "",
+      dateFrom: "",
+      dateTo: "",
+      category: "ALL",
+      searchHistory: []
+    };
+
+    const SEARCH_HISTORY_KEY = "blog-search-history-v1";
+    const tagFilterToggle = document.getElementById("tagFilterToggle");
+    const tagFilterBody = document.getElementById("tagFilterBody");
+    const tagChips = document.getElementById("tagChips");
+    const searchInput = document.getElementById("searchInput");
+    const dateFromInput = document.getElementById("dateFromInput");
+    const dateToInput = document.getElementById("dateToInput");
+    const categorySelect = document.getElementById("categorySelect");
+    const searchHistory = document.getElementById("searchHistory");
+    const resultCount = document.getElementById("resultCount");
+    const statusBox = document.getElementById("statusBox");
+    const postList = document.getElementById("postList");
+    const listWrap = document.getElementById("listWrap");
+    const detailView = document.getElementById("detailView");
+    const detailMeta = document.getElementById("detailMeta");
+    const detailContent = document.getElementById("detailContent");
+    const backToList = document.getElementById("backToList");
+    const DEFAULT_POST_IMAGE = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80";
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function formatDate(raw) {
+      if (!raw) return "날짜 미상";
+      const date = new Date(raw);
+      if (Number.isNaN(date.getTime())) return raw;
+      return new Intl.DateTimeFormat("ko-KR", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      }).format(date);
+    }
+
+    function normalizeImage(raw) {
+      const value = String(raw || "").trim();
+      if (value.startsWith("https://images.unsplash.com/photo-")) return value;
+      return DEFAULT_POST_IMAGE;
+    }
+
+    function renderPostImage(src, alt) {
+      const imageSrc = escapeHtml(normalizeImage(src));
+      const fallback = escapeHtml(DEFAULT_POST_IMAGE);
+      return `<img src="${imageSrc}" alt="${escapeHtml(alt)}" loading="lazy" onerror="this.onerror=null;this.src='${fallback}';">`;
+    }
+
+    function normalizePosts(payload) {
+      const list = Array.isArray(payload && payload.posts) ? payload.posts : [];
+      return list
+        .filter((post) => post && post.title)
+        .map((post, index) => ({
+          ...post,
+          id: post.id || post.slug || `generated-${index + 1}`,
+          slug: String(post.slug || post.id || "").trim() || `post-${post.id || index + 1}`
+        }))
+        .sort((a, b) => (Date.parse(b.date || "") || 0) - (Date.parse(a.date || "") || 0));
+    }
+
+    function categoryLabel(value) {
+      return String(value || "blog").trim() || "blog";
+    }
+
+    function loadSearchHistory() {
+      try {
+        const raw = localStorage.getItem(SEARCH_HISTORY_KEY);
+        const list = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(list)) return [];
+        return list
+          .map((item) => String(item || "").trim())
+          .filter(Boolean)
+          .slice(0, 10);
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function persistSearchHistory() {
+      try {
+        localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(state.searchHistory.slice(0, 10)));
+      } catch (_) {
+      }
+    }
+
+    function addSearchHistory(query) {
+      const normalized = String(query || "").trim();
+      if (!normalized) return;
+      const deduped = [normalized, ...state.searchHistory.filter((item) => item !== normalized)];
+      state.searchHistory = deduped.slice(0, 10);
+      persistSearchHistory();
+      renderSearchHistory();
+    }
+
+    function renderSearchHistory() {
+      if (!state.searchHistory.length) {
+        searchHistory.innerHTML = '<span class="history-title">최근 검색어가 없습니다.</span>';
+        return;
+      }
+
+      searchHistory.innerHTML = `
+        <span class="history-title">최근 검색어</span>
+        ${state.searchHistory.map((item) => `<button type="button" data-history="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join("")}
+        <button type="button" class="clear-history" id="clearSearchHistory">기록 삭제</button>
+      `;
+
+      searchHistory.querySelectorAll("button[data-history]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const keyword = button.getAttribute("data-history") || "";
+          searchInput.value = keyword;
+          state.searchQuery = keyword;
+          applyFilter();
+        });
+      });
+
+      const clearButton = document.getElementById("clearSearchHistory");
+      if (clearButton) {
+        clearButton.addEventListener("click", () => {
+          state.searchHistory = [];
+          persistSearchHistory();
+          renderSearchHistory();
+        });
+      }
+    }
+
+    function searchTerms(query) {
+      return String(query || "")
+        .trim()
+        .split(/\s+/)
+        .map((term) => term.trim().toLowerCase())
+        .filter(Boolean);
+    }
+
+    function escapeRegExp(value) {
+      return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function highlightText(text, query) {
+      const escaped = escapeHtml(text || "");
+      const terms = searchTerms(query);
+      if (!terms.length) return escaped;
+      const pattern = terms.map(escapeRegExp).join("|");
+      if (!pattern) return escaped;
+      return escaped.replace(new RegExp(`(${pattern})`, "gi"), "<mark class=\"hl\">$1</mark>");
+    }
+
+    function matchesSearch(post, query) {
+      const terms = searchTerms(query);
+      if (!terms.length) return true;
+      const title = String(post.title || "").toLowerCase();
+      const content = String(post.content || "").toLowerCase();
+      const tags = (Array.isArray(post.tags) ? post.tags : []).join(" ").toLowerCase();
+      const target = `${title} ${content} ${tags}`;
+      return terms.every((term) => target.includes(term));
+    }
+
+    function inDateRange(postDate, fromDate, toDate) {
+      const base = String(postDate || "").trim();
+      if (!base) return false;
+      const value = Date.parse(base);
+      if (Number.isNaN(value)) return false;
+      if (fromDate) {
+        const from = Date.parse(fromDate);
+        if (!Number.isNaN(from) && value < from) return false;
+      }
+      if (toDate) {
+        const to = Date.parse(toDate);
+        if (!Number.isNaN(to) && value > (to + 86399999)) return false;
+      }
+      return true;
+    }
+
+    function renderCategoryFilters() {
+      const categories = [...new Set(state.posts.map((post) => categoryLabel(post.category)))].sort((a, b) => a.localeCompare(b, "ko"));
+      categorySelect.innerHTML = [
+        '<option value="ALL">전체</option>',
+        ...categories.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item.toUpperCase())}</option>`)
+      ].join("");
+      categorySelect.value = state.category;
+    }
+
+    function uniqueTags(posts) {
+      const map = new Map();
+      posts.forEach((post) => {
+        const tags = Array.isArray(post.tags) ? post.tags : [];
+        tags.forEach((tag) => {
+          const key = String(tag || "").trim();
+          if (!key) return;
+          map.set(key, (map.get(key) || 0) + 1);
+        });
+      });
+      return map;
+    }
+
+    function setStatus(title, message = "") {
+      if (!title) {
+        statusBox.hidden = true;
+        statusBox.innerHTML = "";
+        return;
+      }
+
+      statusBox.hidden = false;
+      statusBox.innerHTML = `<strong>${escapeHtml(title)}</strong>${message ? `<span>${escapeHtml(message)}</span>` : ""}`;
+    }
+
+    function renderTagFilterToggle() {
+      tagFilterToggle.textContent = `태그 필터 ${state.isTagFilterOpen ? "▲" : "▼"}`;
+      tagFilterToggle.setAttribute("aria-expanded", String(state.isTagFilterOpen));
+      tagFilterBody.hidden = !state.isTagFilterOpen;
+    }
+
+    function renderTagFilters() {
+      const tags = uniqueTags(state.posts);
+      const sortedTags = [...tags.entries()]
+        .sort((a, b) => (b[1] - a[1]) || a[0].localeCompare(b[0], "ko"))
+        .map(([tag]) => tag);
+
+      const chips = ["ALL", ...sortedTags];
+      tagChips.innerHTML = chips.map((tag) => {
+        const count = tag === "ALL" ? state.posts.length : tags.get(tag) || 0;
+        const active = tag === state.activeTag ? "active" : "";
+        return `<button class="chip ${active}" type="button" data-tag="${escapeHtml(tag)}">${escapeHtml(tag === "ALL" ? "전체" : tag)} (${count})</button>`;
+      }).join("");
+
+      tagChips.querySelectorAll(".chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          state.activeTag = chip.dataset.tag || "ALL";
+          applyFilter();
+        });
+      });
+    }
+
+    function applyFilter() {
+      state.filteredPosts = state.posts.filter((post) => {
+        if (!matchesSearch(post, state.searchQuery)) return false;
+
+        if (state.category !== "ALL" && categoryLabel(post.category) !== state.category) {
+          return false;
+        }
+
+        if (state.dateFrom || state.dateTo) {
+          if (!inDateRange(post.date, state.dateFrom, state.dateTo)) return false;
+        }
+
+        if (state.activeTag !== "ALL") {
+          const tags = Array.isArray(post.tags) ? post.tags : [];
+          const matched = tags.some((tag) => String(tag) === state.activeTag);
+          if (!matched) return false;
+        }
+
+        return true;
+      });
+
+      renderTagFilters();
+      renderList();
+    }
+
+    function renderList() {
+      resultCount.textContent = `${state.filteredPosts.length}개 글`;
+
+      if (!state.filteredPosts.length) {
+        postList.innerHTML = '<article class="empty"><strong>조건에 맞는 글이 없습니다.</strong>검색어/기간/카테고리/태그를 조정해보세요.</article>';
+        return;
+      }
+
+      postList.innerHTML = state.filteredPosts.map((post) => {
+        const title = highlightText(post.title, state.searchQuery);
+        const excerpt = highlightText(post.excerpt || "요약이 없습니다.", state.searchQuery);
+        const category = escapeHtml(String(post.category || "blog").toUpperCase());
+        const image = renderPostImage(post.image, post.title);
+        const tags = (Array.isArray(post.tags) ? post.tags : []).slice(0, 5);
+
+        return `
+          <a class="post-card" href="?post=${encodeURIComponent(post.slug)}" data-slug="${escapeHtml(post.slug)}">
+            <div class="thumb">
+              ${image}
+              <span class="badge">${category}</span>
+            </div>
+            <div class="post-body">
+              <div class="meta"><span>${formatDate(post.date)}</span><span>ID ${escapeHtml(String(post.id))}</span></div>
+              <h2 class="post-title">${title}</h2>
+              <p class="excerpt">${excerpt}</p>
+              <div class="tag-list">
+                ${tags.map((tag) => `<button class="tag" type="button" data-tag="${escapeHtml(tag)}">#${highlightText(tag, state.searchQuery)}</button>`).join("")}
+              </div>
+            </div>
+          </a>
+        `;
+      }).join("");
+
+      postList.querySelectorAll(".post-card").forEach((card) => {
+        card.addEventListener("click", (event) => {
+          event.preventDefault();
+          const slug = card.getAttribute("data-slug") || "";
+          openDetail(slug, true);
+        });
+      });
+
+      postList.querySelectorAll(".tag").forEach((tagButton) => {
+        tagButton.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          state.activeTag = tagButton.dataset.tag || "ALL";
+          applyFilter();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
+    }
+
+    function inlineMarkdown(text) {
+      return text
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    }
+
+    function markdownToHtml(markdown) {
+      const source = String(markdown || "").replace(/\r/g, "");
+      const lines = source.split("\n");
+      const blocks = [];
+      let listType = "";
+      let tableRows = [];
+
+      function closeList() {
+        if (!listType) return;
+        blocks.push(`</${listType}>`);
+        listType = "";
+      }
+
+      function closeTable() {
+        if (!tableRows.length) return;
+        const header = tableRows[0];
+        const body = tableRows.slice(1);
+        blocks.push("<table><thead><tr>");
+        header.forEach((cell) => blocks.push(`<th>${inlineMarkdown(escapeHtml(cell))}</th>`));
+        blocks.push("</tr></thead><tbody>");
+        body.forEach((row) => {
+          blocks.push("<tr>");
+          row.forEach((cell) => blocks.push(`<td>${inlineMarkdown(escapeHtml(cell))}</td>`));
+          blocks.push("</tr>");
+        });
+        blocks.push("</tbody></table>");
+        tableRows = [];
+      }
+
+      for (let i = 0; i < lines.length; i += 1) {
+        const raw = lines[i];
+        const line = raw.trim();
+
+        if (line.startsWith("```") ) {
+          closeList();
+          closeTable();
+          const codeLines = [];
+          i += 1;
+          while (i < lines.length && !lines[i].trim().startsWith("```")) {
+            codeLines.push(lines[i]);
+            i += 1;
+          }
+          blocks.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+          continue;
+        }
+
+        if (!line) {
+          closeList();
+          closeTable();
+          continue;
+        }
+
+        if (/^\|.*\|$/.test(line)) {
+          const cells = line.split("|").slice(1, -1).map((cell) => cell.trim());
+          const isDivider = cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+          if (!isDivider) tableRows.push(cells);
+          continue;
+        }
+
+        closeTable();
+
+        if (/^---+$/.test(line)) {
+          closeList();
+          blocks.push("<hr>");
+          continue;
+        }
+
+        const heading = line.match(/^(#{1,4})\s+(.+)$/);
+        if (heading) {
+          closeList();
+          const level = Math.min(4, heading[1].length);
+          blocks.push(`<h${level}>${inlineMarkdown(escapeHtml(heading[2]))}</h${level}>`);
+          continue;
+        }
+
+        const ordered = line.match(/^\d+\.\s+(.+)$/);
+        if (ordered) {
+          if (listType !== "ol") {
+            closeList();
+            blocks.push("<ol>");
+            listType = "ol";
+          }
+          blocks.push(`<li>${inlineMarkdown(escapeHtml(ordered[1]))}</li>`);
+          continue;
+        }
+
+        const unordered = line.match(/^[-*]\s+(.+)$/);
+        if (unordered) {
+          if (listType !== "ul") {
+            closeList();
+            blocks.push("<ul>");
+            listType = "ul";
+          }
+          blocks.push(`<li>${inlineMarkdown(escapeHtml(unordered[1]))}</li>`);
+          continue;
+        }
+
+        closeList();
+        blocks.push(`<p>${inlineMarkdown(escapeHtml(line))}</p>`);
+      }
+
+      closeList();
+      closeTable();
+      return blocks.join("");
+    }
+
+    function createUtterances(target) {
+      target.innerHTML = "";
+      const script = document.createElement("script");
+      script.src = "https://utteranc.es/client.js";
+      script.setAttribute("repo", "catcatdo/catcatbuilder");
+      script.setAttribute("issue-term", "pathname");
+      script.setAttribute("theme", "github-light");
+      script.setAttribute("crossorigin", "anonymous");
+      script.async = true;
+      target.appendChild(script);
+    }
+
+    function getPostBySlug(slug) {
+      return state.posts.find((post) => String(post.slug) === String(slug)) || null;
+    }
+
+    function openDetail(slug, updateHistory = false) {
+      const post = getPostBySlug(slug);
+      if (!post) {
+        setStatus("요청한 글을 찾을 수 없습니다.", "목록에서 다시 선택해주세요.");
+        listWrap.hidden = false;
+        detailView.hidden = true;
+        return;
+      }
+
+      if (updateHistory) {
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set("post", post.slug);
+        window.history.pushState({ post: post.slug }, "", nextUrl);
+      }
+
+      const tags = Array.isArray(post.tags) ? post.tags : [];
+      detailMeta.innerHTML = `<span>${formatDate(post.date)}</span><span>${escapeHtml(String(post.category || "blog").toUpperCase())}</span><span>ID ${escapeHtml(String(post.id))}</span>`;
+
+      detailContent.innerHTML = `
+        <figure class="detail-cover">${renderPostImage(post.image, post.title)}</figure>
+        <h1 class="detail-title">${escapeHtml(post.title)}</h1>
+        <div class="detail-tags">${tags.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join("")}</div>
+        <section class="detail-body">${markdownToHtml(post.content || post.excerpt || "")}</section>
+        <section class="comments-box" id="commentsBox"></section>
+      `;
+
+      createUtterances(document.getElementById("commentsBox"));
+      listWrap.hidden = true;
+      detailView.hidden = false;
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+
+    function openList(updateHistory = false) {
+      if (updateHistory) {
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.delete("post");
+        window.history.pushState({}, "", nextUrl);
+      }
+      detailView.hidden = true;
+      listWrap.hidden = false;
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+
+    async function init() {
+      renderTagFilterToggle();
+      state.searchHistory = loadSearchHistory();
+      renderSearchHistory();
+      setStatus("게시글을 불러오는 중입니다...");
+      resultCount.textContent = "불러오는 중...";
+      postList.innerHTML = '<article class="empty">잠시만 기다려주세요.</article>';
+
+      try {
+        const response = await fetch("posts.json", { cache: "no-cache" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+
+        state.posts = normalizePosts(payload);
+        state.activeTag = "ALL";
+        renderCategoryFilters();
+        setStatus("");
+        applyFilter();
+
+        const selectedSlug = new URLSearchParams(window.location.search).get("post");
+        if (selectedSlug) {
+          openDetail(selectedSlug, false);
+        }
+      } catch (error) {
+        setStatus("게시글 로딩 실패", "`posts.json`을 확인한 뒤 새로고침 해주세요.");
+        resultCount.textContent = "실패";
+        postList.innerHTML = '<article class="empty"><strong>목록을 불러오지 못했습니다.</strong>네트워크 또는 JSON 형식을 확인해주세요.</article>';
+      }
+    }
+
+    backToList.addEventListener("click", () => openList(true));
+    searchInput.addEventListener("input", () => {
+      state.searchQuery = searchInput.value.trim();
+      applyFilter();
+    });
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        addSearchHistory(searchInput.value);
+      }
+    });
+    searchInput.addEventListener("blur", () => addSearchHistory(searchInput.value));
+    dateFromInput.addEventListener("change", () => {
+      state.dateFrom = dateFromInput.value;
+      applyFilter();
+    });
+    dateToInput.addEventListener("change", () => {
+      state.dateTo = dateToInput.value;
+      applyFilter();
+    });
+    categorySelect.addEventListener("change", () => {
+      state.category = categorySelect.value || "ALL";
+      applyFilter();
+    });
+    tagFilterToggle.addEventListener("click", () => {
+      state.isTagFilterOpen = !state.isTagFilterOpen;
+      renderTagFilterToggle();
+    });
+
+    window.addEventListener("popstate", () => {
+      const selectedSlug = new URLSearchParams(window.location.search).get("post");
+      if (selectedSlug) {
+        openDetail(selectedSlug, false);
+      } else {
+        openList(false);
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

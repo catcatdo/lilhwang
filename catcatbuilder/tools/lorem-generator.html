@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lorem 생성기</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="tool-theme.css">
+
+<!-- SEO Master Start -->
+    <link rel="canonical" href="https://lilhwang.com/tools/lorem-generator.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Lorem 생성기">
+    <meta property="og:description" content="홈 도구 스테이션 Lorem Ipsum 생성기 문단 수를 선택해 더미 텍스트를 생성합니다. 문단 수 생성">
+    <meta property="og:url" content="https://lilhwang.com/tools/lorem-generator.html">
+    <meta property="og:image" content="https://lilhwang.com/images/blog-fallback.svg">
+    <meta property="og:site_name" content="릴황">
+    <meta property="og:locale" content="ko_KR">
+    <script type="application/ld+json" id="seo-structured-data">
+        {"@type":"Article","@context":"https://schema.org","mainEntityOfPage":{"@type":"WebPage","@id":"https://lilhwang.com/tools/lorem-generator.html"},"headline":"Lorem 생성기","description":"홈 도구 스테이션 Lorem Ipsum 생성기 문단 수를 선택해 더미 텍스트를 생성합니다. 문단 수 생성","url":"https://lilhwang.com/tools/lorem-generator.html","inLanguage":"ko-KR","author":{"@type":"Organization","name":"릴황"},"publisher":{"@type":"Organization","name":"릴황","url":"https://lilhwang.com"}}
+    </script>
+<!-- SEO Master End -->
+</head>
+<body><main class="wrap"><header class="site-header"><nav class="site-nav"><a href="../index.html">홈</a><a href="../developer-tools.html" aria-current="page">도구 스테이션</a></nav></header><section class="hero"><h1>Lorem Ipsum 생성기</h1><p>문단 수를 선택해 더미 텍스트를 생성합니다.</p></section><section class="panel form-grid"><label for="count">문단 수</label><input id="count" type="number" min="1" max="10" value="3"><div class="button-row"><button id="gen">생성</button></div><textarea id="output" readonly></textarea></section></main><script>const s='lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua';document.getElementById('gen').onclick=()=>{const c=Math.max(1,Math.min(10,Number(document.getElementById('count').value)||1));const words=s.split(' ');const p=[];for(let i=0;i<c;i++){const len=35+Math.floor(Math.random()*40);let t=[];for(let j=0;j<len;j++)t.push(words[Math.floor(Math.random()*words.length)]);let line=t.join(' ');line=line.charAt(0).toUpperCase()+line.slice(1)+'.';p.push(line);}document.getElementById('output').value=p.join('\n\n');};document.getElementById('gen').click();</script></body></html>
