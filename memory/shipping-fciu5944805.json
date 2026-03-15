@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-12T18:29:30Z",
+  "updatedAt": "2026-03-15T06:29:20Z",
   "tracking": {
     "containerNo": "FCIU5944805",
     "blNo": "CF326PCR3001"
@@ -7,15 +7,51 @@
   "baseline": {
     "vessel": "COSCO FOS",
     "imo": "9484302",
-    "positionSummary": "Yellow Sea / China Coast",
-    "voyageLeg": "Tianjin Xingang -> Lianyungang",
-    "etaLianyungang": "N/A (VesselFinder predicted ETA hidden) / MaritimeOptima: destination Lianyungang",
+    "positionSummary": "South Korean Exclusive Economic Zone (AIS <1h)",
+    "voyageLeg": "Qingdao -> Incheon, Republic of Korea",
+    "etaSummary": "Saturday 14th March (site summary)",
     "lastPortCalls": [
-      {"port": "Tianjin Xingang", "departure": "2026-03-11"},
-      {"port": "Dalian", "departure": "2026-03-08"},
-      {"port": "Busan", "departure": "2026-03-06"}
+      {
+        "port": "Qingdao (CN)",
+        "arrival": "2026-03-14",
+        "departure": "2026-03-14"
+      },
+      {
+        "port": "Lianyungang (CN)",
+        "arrival": "2026-03-12",
+        "departure": "2026-03-13"
+      },
+      {
+        "port": "Tianjin Xingang (CN)",
+        "arrival": "2026-03-08",
+        "departure": "2026-03-11"
+      }
     ],
     "containerEventVisible": false,
-    "notes": "Public container/BL event feed still not visible. VesselFinder now shows Predicted ETA as '-' while still mentioning expected arrival Mar 12 18:00 in narrative text; no new port-call event detected."
-  }
+    "notes": "COSCO public cargo tracking API still returns no data for both container and BL. Vessel area text changed from Yellow Sea to South Korean EEZ."
+  },
+  "check": {
+    "containerLookup": "failed_or_no_public_result",
+    "blLookup": "failed_or_no_public_result",
+    "changeDetected": true,
+    "changeSummary": "Vessel position summary text changed: Yellow Sea -> South Korean Exclusive Economic Zone"
+  },
+  "apiEvidence": {
+    "containerPublic": {
+      "endpoint": "https://elines.coscoshipping.com/ebtracking/public/containers/FCIU5944805",
+      "code": "200",
+      "summary": "containers: [] / notFound: FCIU5944805"
+    },
+    "blPublic": {
+      "endpoint": "https://elines.coscoshipping.com/ebtracking/public/bill/CF326PCR3001",
+      "code": "200",
+      "summary": "isbillOfLadingExist: false"
+    }
+  },
+  "sources": [
+    "https://maritimeoptima.com/public/vessels/pages/imo:9484302/mmsi:477947700/COSCO_FOS.html",
+    "https://elines.coscoshipping.com/ebusiness/cargoTracking",
+    "https://elines.coscoshipping.com/ebtracking/public/containers/FCIU5944805",
+    "https://elines.coscoshipping.com/ebtracking/public/bill/CF326PCR3001"
+  ]
 }
