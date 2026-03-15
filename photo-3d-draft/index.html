@@ -365,9 +365,7 @@
     }
 
     function parseDimsFromText(text) {
-      const clean = text
-        .replace(/,/g, '.')
-        .replace(/[xX×]/g, 'x')
+      const clean = normalizeOcrText(text)
         .replace(/\s+/g, ' ')
         .toLowerCase();
 
@@ -448,8 +446,62 @@
       return { url: canvas.toDataURL('image/png'), roi: roiText };
     }
 
+    function normalizeOcrText(text) {
+      return (text || '')
+        .replace(/[Oo]/g, '0')
+        .replace(/[Il]/g, '1')
+        .replace(/[S]/g, '5')
+        .replace(/,/g, '.')
+        .replace(/[xX×]/g, 'x');
+    }
+
+    function makeOcrVariants(dataUrl) {
+      const img = new Image();
+      img.src = dataUrl;
+      return new Promise((resolve) => {
+        img.onload = () => {
+          const variants = [];
+
+          const mk = (name, drawFn) => {
+            const c = document.createElement('canvas');
+            c.width = Math.max(1, Math.floor(img.width * 2));
+            c.height = Math.max(1, Math.floor(img.height * 2));
+            const ctx = c.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            drawFn?.(ctx, c.width, c.height);
+            variants.push({ name, url: c.toDataURL('image/png') });
+          };
+
+          mk('원본확대');
+          mk('흑백강조', (ctx, w, h) => {
+            const d = ctx.getImageData(0, 0, w, h);
+            for (let i = 0; i < d.data.length; i += 4) {
+              const r = d.data[i], g = d.data[i+1], b = d.data[i+2];
+              const y = 0.299*r + 0.587*g + 0.114*b;
+              const v = y > 170 ? 255 : 0;
+              d.data[i] = d.data[i+1] = d.data[i+2] = v;
+            }
+            ctx.putImageData(d, 0, 0);
+          });
+          mk('반전강조', (ctx, w, h) => {
+            const d = ctx.getImageData(0, 0, w, h);
+            for (let i = 0; i < d.data.length; i += 4) {
+              const r = d.data[i], g = d.data[i+1], b = d.data[i+2];
+              const y = 0.299*r + 0.587*g + 0.114*b;
+              const v = y > 150 ? 0 : 255;
+              d.data[i] = d.data[i+1] = d.data[i+2] = v;
+            }
+            ctx.putImageData(d, 0, 0);
+          });
+
+          resolve(variants);
+        };
+      });
+    }
+
     function extractDimCandidates(text) {
-      const clean = text.replace(/,/g, '.').replace(/[xX×]/g, 'x').toLowerCase();
+      const clean = normalizeOcrText(text).toLowerCase();
       const candidates = [];
 
       const tripleRe = /(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)(?:\s*(mm|cm|m))?/g;
@@ -491,13 +543,27 @@
       if (!originalImage) return alert('먼저 이미지를 올려줘.');
       if (!window.Tesseract) return alert('OCR 라이브러리를 불러오지 못했어.');
 
-      analysisEl.innerHTML = 'OCR로 치수 텍스트 인식 중... (이미지 크기에 따라 5~20초)';
+      analysisEl.innerHTML = 'OCR로 치수 텍스트 인식 중... (전처리 3패스, 보통 8~25초)';
       try {
         const target = getOcrTargetImage();
-        const { data } = await Tesseract.recognize(target.url, 'eng+kor');
-        const text = data?.text || '';
-        const dims = parseDimsFromText(text);
-        const candidates = extractDimCandidates(text);
+        const variants = await makeOcrVariants(target.url);
+
+        let best = null;
+        for (const v of variants) {
+          const { data } = await Tesseract.recognize(v.url, 'eng+kor');
+          const text = data?.text || '';
+          const dims = parseDimsFromText(text);
+          const candidates = extractDimCandidates(text);
+          const confidence = Number(data?.confidence || 0);
+
+          const score = (dims ? 1000 : 0) + candidates.length * 100 + confidence;
+          const row = { variant: v.name, text, dims, candidates, confidence, score };
+          if (!best || row.score > best.score) best = row;
+        }
+
+        const dims = best?.dims || null;
+        const candidates = best?.candidates || [];
+        const text = best?.text || '';
 
         if (dims?.width) document.getElementById('dimW').value = dims.width.toFixed(1);
         if (dims?.height) document.getElementById('dimH').value = dims.height.toFixed(1);
@@ -509,10 +575,11 @@
 
         analysisEl.innerHTML = `
           OCR 영역: <b>${target.roi}</b><br>
+          선택된 인식모드: <b>${best?.variant ?? '-'}</b> (confidence: ${best?.confidence?.toFixed?.(1) ?? '-'})<br>
           OCR 추출 텍스트(앞부분): <br><b>${text.slice(0, 240).replace(/</g, '&lt;')}</b><br>
           자동 추정 치수: <b>${dims ? `${dims.width ?? '-'} x ${dims.height ?? '-'} x ${dims.depth ?? '-'} mm` : '인식 실패'}</b><br>
           후보 치수 TOP3:<br><b>${candText}</b><br>
-          <span class="small">※ OCR은 오인식 가능. 입력값은 반드시 한 번 확인해줘.</span>
+          <span class="small">※ OCR 오인식 보정을 위해 전처리 3패스를 비교해 가장 점수 높은 결과를 선택함.</span>
         `;
       } catch (e) {
         console.error(e);
