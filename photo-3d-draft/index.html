@@ -35,6 +35,17 @@
         <button id="removeBgBtn" class="primary">배경 제거</button>
         <button id="ocrDimBtn">치수 자동인식(OCR)</button>
       </div>
+      <div class="grid-3" style="margin-bottom:12px;">
+        <label>OCR 시작 X(px)
+          <input id="roiX" type="number" min="0" step="1" value="0" />
+        </label>
+        <label>OCR 시작 Y(px)
+          <input id="roiY" type="number" min="0" step="1" value="0" />
+        </label>
+        <label>OCR 영역 폭 x 높이(px)
+          <input id="roiWH" placeholder="예: 800x300 (비우면 전체)" />
+        </label>
+      </div>
       <div class="row">
         <div>
           <div class="small" style="margin-bottom:6px;">원본</div>
@@ -237,23 +248,100 @@
       return null;
     }
 
+    function getOcrTargetImage() {
+      const x = Number(document.getElementById('roiX').value || 0);
+      const y = Number(document.getElementById('roiY').value || 0);
+      const wh = (document.getElementById('roiWH').value || '').toLowerCase().trim();
+      const m = wh.match(/(\d+)\s*[x×]\s*(\d+)/);
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      if (!m) {
+        canvas.width = originalImage.width;
+        canvas.height = originalImage.height;
+        ctx.drawImage(originalImage, 0, 0);
+        return { url: canvas.toDataURL('image/png'), roi: `전체(${originalImage.width}x${originalImage.height})` };
+      }
+
+      const w = Number(m[1]);
+      const h = Number(m[2]);
+      const sx = Math.max(0, Math.min(x, originalImage.width - 1));
+      const sy = Math.max(0, Math.min(y, originalImage.height - 1));
+      const sw = Math.max(1, Math.min(w, originalImage.width - sx));
+      const sh = Math.max(1, Math.min(h, originalImage.height - sy));
+
+      canvas.width = sw;
+      canvas.height = sh;
+      ctx.drawImage(originalImage, sx, sy, sw, sh, 0, 0, sw, sh);
+
+      return { url: canvas.toDataURL('image/png'), roi: `${sx},${sy},${sw},${sh}` };
+    }
+
+    function extractDimCandidates(text) {
+      const clean = text.replace(/,/g, '.').replace(/[xX×]/g, 'x').toLowerCase();
+      const candidates = [];
+
+      const tripleRe = /(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)(?:\s*(mm|cm|m))?/g;
+      let m;
+      while ((m = tripleRe.exec(clean)) !== null) {
+        const unit = m[4] || 'mm';
+        candidates.push({
+          width: toMm(Number(m[1]), unit),
+          height: toMm(Number(m[2]), unit),
+          depth: toMm(Number(m[3]), unit),
+          source: m[0],
+        });
+      }
+
+      const pairRe = /(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)(?:\s*(mm|cm|m))?/g;
+      while ((m = pairRe.exec(clean)) !== null) {
+        const unit = m[3] || 'mm';
+        candidates.push({
+          width: toMm(Number(m[1]), unit),
+          height: toMm(Number(m[2]), unit),
+          depth: null,
+          source: m[0],
+        });
+      }
+
+      const uniq = [];
+      const seen = new Set();
+      for (const c of candidates) {
+        const key = `${c.width}|${c.height}|${c.depth ?? '-'}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        uniq.push(c);
+        if (uniq.length >= 3) break;
+      }
+      return uniq;
+    }
+
     document.getElementById('ocrDimBtn').addEventListener('click', async () => {
       if (!originalImage) return alert('먼저 이미지를 올려줘.');
       if (!window.Tesseract) return alert('OCR 라이브러리를 불러오지 못했어.');
 
       analysisEl.innerHTML = 'OCR로 치수 텍스트 인식 중... (이미지 크기에 따라 5~20초)';
       try {
-        const { data } = await Tesseract.recognize(originalImage.src, 'eng+kor');
+        const target = getOcrTargetImage();
+        const { data } = await Tesseract.recognize(target.url, 'eng+kor');
         const text = data?.text || '';
         const dims = parseDimsFromText(text);
+        const candidates = extractDimCandidates(text);
 
         if (dims?.width) document.getElementById('dimW').value = dims.width.toFixed(1);
         if (dims?.height) document.getElementById('dimH').value = dims.height.toFixed(1);
         if (dims?.depth) document.getElementById('dimD').value = dims.depth.toFixed(1);
 
+        const candText = candidates.length
+          ? candidates.map((c, i) => `${i + 1}) ${c.width ?? '-'} x ${c.height ?? '-'} x ${c.depth ?? '-'} mm (${c.source})`).join('<br>')
+          : '후보 없음';
+
         analysisEl.innerHTML = `
+          OCR 영역: <b>${target.roi}</b><br>
           OCR 추출 텍스트(앞부분): <br><b>${text.slice(0, 240).replace(/</g, '&lt;')}</b><br>
           자동 추정 치수: <b>${dims ? `${dims.width ?? '-'} x ${dims.height ?? '-'} x ${dims.depth ?? '-'} mm` : '인식 실패'}</b><br>
+          후보 치수 TOP3:<br><b>${candText}</b><br>
           <span class="small">※ OCR은 오인식 가능. 입력값은 반드시 한 번 확인해줘.</span>
         `;
       } catch (e) {
