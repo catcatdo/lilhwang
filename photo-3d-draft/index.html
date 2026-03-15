@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photo → 3D Print Draft</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; background:#0f1115; color:#e8ecf1; }
+    .wrap { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+    .card { background:#171a21; border:1px solid #2a2f3a; border-radius:14px; padding:16px; margin-bottom:16px; }
+    h1,h2 { margin: 0 0 12px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    .preview { width:100%; min-height:260px; border:1px dashed #3b4352; border-radius:10px; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#0b0d12; }
+    .preview img { max-width:100%; max-height:360px; object-fit:contain; }
+    input[type="file"], button, input, select { border-radius:8px; border:1px solid #3b4352; background:#10131a; color:#e8ecf1; padding:10px; }
+    button { cursor:pointer; }
+    button.primary { background:#3a7afe; border-color:#3a7afe; font-weight:600; }
+    .meta { font-size:14px; color:#b6c0d0; line-height:1.6; }
+    .grid-3 { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px; }
+    .grid-6 { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px; }
+    label { display:flex; flex-direction:column; gap:6px; font-size:14px; color:#cdd6e3; }
+    .small { font-size:12px; color:#9aa6bc; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>사진 → 3D 프린트 도안 (초안)</h1>
+    <p class="small">1) 사진 업로드 → 2) 배경 제거(초안) → 3) 면 치수 입력. (실서비스에선 AI 세그멘테이션 모델로 교체 권장)</p>
+
+    <div class="card">
+      <h2>1. 사진 업로드 / 분석</h2>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+        <input id="fileInput" type="file" accept="image/*" />
+        <button id="analyzeBtn">분석</button>
+        <button id="removeBgBtn" class="primary">배경 제거</button>
+      </div>
+      <div class="row">
+        <div>
+          <div class="small" style="margin-bottom:6px;">원본</div>
+          <div class="preview"><img id="originalPreview" alt="원본 미리보기" /></div>
+        </div>
+        <div>
+          <div class="small" style="margin-bottom:6px;">배경 제거 결과</div>
+          <div class="preview"><img id="resultPreview" alt="결과 미리보기" /></div>
+        </div>
+      </div>
+      <div id="analysis" class="meta" style="margin-top:12px;">아직 분석 전</div>
+    </div>
+
+    <div class="card">
+      <h2>2. 기본 치수 (mm)</h2>
+      <div class="grid-3">
+        <label>가로(W)
+          <input id="dimW" type="number" min="0" step="0.1" placeholder="예: 120" />
+        </label>
+        <label>세로(H)
+          <input id="dimH" type="number" min="0" step="0.1" placeholder="예: 80" />
+        </label>
+        <label>깊이(D)
+          <input id="dimD" type="number" min="0" step="0.1" placeholder="예: 40" />
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. 각 면 치수/메모</h2>
+      <div class="grid-6">
+        <label>정면 (Front)
+          <input id="front" placeholder="예: 라벨 폭 60, 높이 30" />
+        </label>
+        <label>후면 (Back)
+          <input id="back" placeholder="예: 각인 영역 50x20" />
+        </label>
+        <label>좌측 (Left)
+          <input id="left" placeholder="예: 곡률 있음" />
+        </label>
+        <label>우측 (Right)
+          <input id="right" placeholder="예: 버튼 홀 8mm" />
+        </label>
+        <label>상단 (Top)
+          <input id="top" placeholder="예: 캡 직경 28" />
+        </label>
+        <label>하단 (Bottom)
+          <input id="bottom" placeholder="예: 두께 최소 2.4" />
+        </label>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:10px;">
+        <button id="saveJsonBtn">입력값 JSON 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const originalPreview = document.getElementById('originalPreview');
+    const resultPreview = document.getElementById('resultPreview');
+    const analysisEl = document.getElementById('analysis');
+
+    let originalImage = null;
+
+    function loadImage(file) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
+
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      originalImage = await loadImage(file);
+      originalPreview.src = originalImage.src;
+      resultPreview.src = '';
+      analysisEl.textContent = '이미지 로드 완료. 분석 버튼을 눌러줘.';
+    });
+
+    document.getElementById('analyzeBtn').addEventListener('click', () => {
+      if (!originalImage) return alert('먼저 이미지를 올려줘.');
+      const { width, height } = originalImage;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(originalImage, 0, 0);
+
+      const imgData = ctx.getImageData(0, 0, width, height);
+      const data = imgData.data;
+
+      // 단순 전경 추정(흰 배경 가정): 너무 밝은 픽셀 제외
+      let minX = width, minY = height, maxX = 0, maxY = 0, count = 0;
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const i = (y * width + x) * 4;
+          const r = data[i], g = data[i+1], b = data[i+2];
+          const isBgLike = r > 240 && g > 240 && b > 240;
+          if (!isBgLike) {
+            count++;
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+
+      const bbox = count > 0 ? `${minX},${minY} ~ ${maxX},${maxY}` : '감지 실패';
+      analysisEl.innerHTML = `
+        해상도: <b>${width} x ${height}</b><br>
+        전경 추정 픽셀: <b>${count.toLocaleString()}</b><br>
+        전경 BBox(추정): <b>${bbox}</b><br>
+        <span class="small">※ 현재는 흰 배경 기반 단순 분석. 이후 AI 세그멘테이션(U2Net/SAM)으로 교체 권장.</span>
+      `;
+    });
+
+    document.getElementById('removeBgBtn').addEventListener('click', () => {
+      if (!originalImage) return alert('먼저 이미지를 올려줘.');
+
+      const { width, height } = originalImage;
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(originalImage, 0, 0);
+
+      const imgData = ctx.getImageData(0, 0, width, height);
+      const data = imgData.data;
+
+      // 초안용 배경 제거: 밝은 픽셀을 투명 처리
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+        const isBgLike = r > 240 && g > 240 && b > 240;
+        if (isBgLike) data[i + 3] = 0;
+      }
+
+      ctx.putImageData(imgData, 0, 0);
+      resultPreview.src = canvas.toDataURL('image/png');
+    });
+
+    document.getElementById('saveJsonBtn').addEventListener('click', () => {
+      const payload = {
+        dimensions_mm: {
+          width: Number(document.getElementById('dimW').value || 0),
+          height: Number(document.getElementById('dimH').value || 0),
+          depth: Number(document.getElementById('dimD').value || 0),
+        },
+        faces: {
+          front: document.getElementById('front').value,
+          back: document.getElementById('back').value,
+          left: document.getElementById('left').value,
+          right: document.getElementById('right').value,
+          top: document.getElementById('top').value,
+          bottom: document.getElementById('bottom').value,
+        },
+        createdAt: new Date().toISOString(),
+      };
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'photo-3d-input.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
