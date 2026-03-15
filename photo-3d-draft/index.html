@@ -33,6 +33,7 @@
         <input id="fileInput" type="file" accept="image/*" />
         <button id="analyzeBtn">분석</button>
         <button id="removeBgBtn" class="primary">배경 제거</button>
+        <button id="ocrDimBtn">치수 자동인식(OCR)</button>
       </div>
       <div class="row">
         <div>
@@ -90,6 +91,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
     const fileInput = document.getElementById('fileInput');
     const originalPreview = document.getElementById('originalPreview');
@@ -178,6 +180,86 @@
 
       ctx.putImageData(imgData, 0, 0);
       resultPreview.src = canvas.toDataURL('image/png');
+    });
+
+    function toMm(value, unit) {
+      if (!Number.isFinite(value)) return null;
+      if (unit === 'cm') return value * 10;
+      if (unit === 'm') return value * 1000;
+      return value;
+    }
+
+    function parseDimsFromText(text) {
+      const clean = text
+        .replace(/,/g, '.')
+        .replace(/[xX×]/g, 'x')
+        .replace(/\s+/g, ' ')
+        .toLowerCase();
+
+      const triple = clean.match(/(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)(?:\s*(mm|cm|m))?/);
+      if (triple) {
+        const unit = triple[4] || 'mm';
+        return {
+          width: toMm(Number(triple[1]), unit),
+          height: toMm(Number(triple[2]), unit),
+          depth: toMm(Number(triple[3]), unit),
+          mode: 'triple',
+          unit,
+        };
+      }
+
+      const pairs = clean.match(/(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)(?:\s*(mm|cm|m))?/);
+      if (pairs) {
+        const unit = pairs[3] || 'mm';
+        return {
+          width: toMm(Number(pairs[1]), unit),
+          height: toMm(Number(pairs[2]), unit),
+          depth: null,
+          mode: 'pair',
+          unit,
+        };
+      }
+
+      const labeled = {
+        width: clean.match(/(?:w|width|가로)\s*[:=]?\s*(\d+(?:\.\d+)?)(?:\s*(mm|cm|m))?/),
+        height: clean.match(/(?:h|height|세로|높이)\s*[:=]?\s*(\d+(?:\.\d+)?)(?:\s*(mm|cm|m))?/),
+        depth: clean.match(/(?:d|depth|깊이|두께)\s*[:=]?\s*(\d+(?:\.\d+)?)(?:\s*(mm|cm|m))?/),
+      };
+
+      const out = { width: null, height: null, depth: null, mode: 'labeled', unit: 'mm' };
+      for (const [k, m] of Object.entries(labeled)) {
+        if (!m) continue;
+        const unit = m[2] || 'mm';
+        out[k] = toMm(Number(m[1]), unit);
+      }
+
+      if (out.width || out.height || out.depth) return out;
+      return null;
+    }
+
+    document.getElementById('ocrDimBtn').addEventListener('click', async () => {
+      if (!originalImage) return alert('먼저 이미지를 올려줘.');
+      if (!window.Tesseract) return alert('OCR 라이브러리를 불러오지 못했어.');
+
+      analysisEl.innerHTML = 'OCR로 치수 텍스트 인식 중... (이미지 크기에 따라 5~20초)';
+      try {
+        const { data } = await Tesseract.recognize(originalImage.src, 'eng+kor');
+        const text = data?.text || '';
+        const dims = parseDimsFromText(text);
+
+        if (dims?.width) document.getElementById('dimW').value = dims.width.toFixed(1);
+        if (dims?.height) document.getElementById('dimH').value = dims.height.toFixed(1);
+        if (dims?.depth) document.getElementById('dimD').value = dims.depth.toFixed(1);
+
+        analysisEl.innerHTML = `
+          OCR 추출 텍스트(앞부분): <br><b>${text.slice(0, 240).replace(/</g, '&lt;')}</b><br>
+          자동 추정 치수: <b>${dims ? `${dims.width ?? '-'} x ${dims.height ?? '-'} x ${dims.depth ?? '-'} mm` : '인식 실패'}</b><br>
+          <span class="small">※ OCR은 오인식 가능. 입력값은 반드시 한 번 확인해줘.</span>
+        `;
+      } catch (e) {
+        console.error(e);
+        analysisEl.innerHTML = 'OCR 인식 중 오류가 발생했어. 이미지 해상도/문자 선명도를 높여서 다시 시도해줘.';
+      }
     });
 
     document.getElementById('saveJsonBtn').addEventListener('click', () => {
