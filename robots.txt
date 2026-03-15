@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://catcatdo.github.io/lilhwang/sitemap.xml

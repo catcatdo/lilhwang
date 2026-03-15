@@ -1,133 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lilhwang | Personal Publishing Site</title>
-  <meta name="description" content="개인 프로젝트, 기록, 인사이트를 축적하는 콘텐츠 중심 사이트입니다.">
-  <link rel="stylesheet" href="assets/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Print Tool</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1115;color:#e8ecf1;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+    .box{max-width:680px;padding:28px;border:1px solid #2a2f3a;border-radius:14px;background:#171a21;text-align:center}
+    a{display:inline-block;margin-top:14px;padding:10px 14px;border-radius:10px;background:#3a7afe;color:#fff;text-decoration:none}
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="index.html">Lilhwang</a>
-      <nav>
-        <a href="posts/index.html">Posts</a>
-        <a href="categories/index.html">Categories</a>
-        <a href="archive.html">Archive</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero container">
-      <p class="eyebrow">Content-first site for AdSense approval readiness</p>
-      <h1>읽을 거리와 작업 기록이 쌓이는 개인 사이트</h1>
-      <p class="lead">
-        이 사이트는 한 장짜리 포트폴리오가 아니라, 주제별 글과 프로젝트 기록이 쌓이는 출판형 구조를 목표로 합니다.
-        주제는 이후 확정하더라도, 구조는 애드센스 심사에 맞춰 먼저 정리합니다.
-      </p>
-      <div class="hero-actions">
-        <a class="button" href="posts/index.html">글 목록 보기</a>
-        <a class="button button-secondary" href="about.html">사이트 소개</a>
-      </div>
-    </section>
-
-    <section class="container section">
-      <div class="section-heading">
-        <h2>핵심 카테고리</h2>
-        <a href="categories/index.html">전체 보기</a>
-      </div>
-      <div class="grid grid-3">
-        <article class="card">
-          <h3><a href="categories/build-log.html">Build Log</a></h3>
-          <p>무언가를 만들면서 쌓이는 설계, 시행착오, 수정 기록을 담는 카테고리.</p>
-        </article>
-        <article class="card">
-          <h3><a href="categories/field-notes.html">Field Notes</a></h3>
-          <p>작업 중 관찰한 문제, 판단 기준, 실전 팁을 정리하는 카테고리.</p>
-        </article>
-        <article class="card">
-          <h3><a href="categories/resources.html">Resources</a></h3>
-          <p>도구, 참고자료, 체크리스트를 독립적인 읽을거리로 정리하는 카테고리.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="container section">
-      <div class="section-heading">
-        <h2>최신 글</h2>
-        <a href="posts/index.html">모든 글</a>
-      </div>
-      <div class="stack">
-        <article class="post-card">
-          <p class="meta">Build Log · 2026-03-11</p>
-          <h3><a href="posts/rebuild-roadmap.html">개인 사이트를 승인 가능한 구조로 다시 세우는 로드맵</a></h3>
-          <p>한 장짜리 소개 사이트를 버리고, 콘텐츠 허브 중심 구조로 전환할 때 필요한 페이지와 우선순위를 정리합니다.</p>
-        </article>
-        <article class="post-card">
-          <p class="meta">Field Notes · 2026-03-11</p>
-          <h3><a href="posts/what-adsense-checks-first.html">애드센스 심사에서 먼저 보게 되는 신호들</a></h3>
-          <p>콘텐츠 양보다 먼저 걸리는 탐색성, 정책 페이지, 비어 있는 섹션 문제를 체크리스트로 정리합니다.</p>
-        </article>
-        <article class="post-card">
-          <p class="meta">Resources · 2026-03-11</p>
-          <h3><a href="posts/site-launch-checklist.html">사이트 오픈 전 점검해야 할 최소 체크리스트</a></h3>
-          <p>메타 정보, 링크, 모바일 탐색, 정책 페이지, 글 연결 구조까지 배포 직전 확인할 항목을 모았습니다.</p>
-        </article>
-        <article class="post-card">
-          <p class="meta">Build Log · 2026-03-11</p>
-          <h3><a href="posts/editorial-calendar-basics.html">주제 확정 전에도 운영 가능한 에디토리얼 캘린더의 기본</a></h3>
-          <p>주제가 늦게 정해져도 사이트 운영 리듬을 잃지 않도록 카테고리별 발행 계획을 먼저 짜는 방법을 정리합니다.</p>
-        </article>
-        <article class="post-card">
-          <p class="meta">Field Notes · 2026-03-11</p>
-          <h3><a href="posts/page-quality-signals.html">페이지 품질을 떨어뜨리는 작은 신호들</a></h3>
-          <p>링크 끊김, 얇은 문단, 비어 있는 CTA처럼 사소해 보이지만 신뢰도를 깎는 요소들을 정리합니다.</p>
-        </article>
-        <article class="post-card">
-          <p class="meta">Resources · 2026-03-11</p>
-          <h3><a href="posts/about-page-checklist.html">소개 페이지를 신뢰 가능한 형태로 만드는 체크리스트</a></h3>
-          <p>운영자 정보, 사이트 목적, 업데이트 방향을 어떤 밀도로 적어야 하는지 정리한 가이드입니다.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="container section split-callout">
-      <div>
-        <h2>왜 이런 구조로 시작하나</h2>
-        <p>
-          애드센스는 디자인보다 독립적인 읽을거리, 신뢰 가능한 운영 정보, 명확한 탐색 구조를 먼저 봅니다.
-          그래서 홈 화면보다 글 상세 페이지와 아카이브 구조를 우선 설계했습니다.
-        </p>
-      </div>
-      <aside class="callout">
-        <h3>승인 전 최소 기준</h3>
-        <ul>
-          <li>글 8개 이상</li>
-          <li>카테고리 2개 이상</li>
-          <li>About, Contact, Privacy, Terms 완비</li>
-          <li>비어 있는 페이지 없음</li>
-        </ul>
-      </aside>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <p class="brand brand-footer">Lilhwang</p>
-        <p>개인 기록과 프로젝트를 장기적으로 축적하는 출판형 사이트.</p>
-      </div>
-      <div class="footer-links">
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
-      </div>
-    </div>
-  </footer>
+  <div class="box">
+    <h1>Photo → 3D Print Tool</h1>
+    <p>이 사이트는 이제 3D 프린트 도구 전용으로 운영됩니다.</p>
+    <a href="/tools/photo-3d-print">도구 열기</a>
+  </div>
 </body>
 </html>
