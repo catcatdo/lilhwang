@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T02:46:00Z",
+  "updatedAt": "2026-03-15T02:46:55Z",
   "rules": {
     "removeOnDelivered": true,
     "addOnUserProvidedTrackingNo": true,
@@ -29,6 +29,14 @@
       "type": "parcel",
       "active": true,
       "source": "memory_restore"
+    },
+    {
+      "id": "402800006302",
+      "type": "parcel",
+      "carrier": "fedex",
+      "label": "MacBook Air",
+      "active": true,
+      "source": "user_added_2026-03-15"
     }
   ]
 }
