@@ -2,6 +2,7 @@
   "updatedAt": "2026-03-15T02:46:55Z",
   "rules": {
     "removeOnDelivered": true,
+    "removeDeliveredFromSheet": true,
     "addOnUserProvidedTrackingNo": true,
     "notifyOnlyOnChange": true
   },
