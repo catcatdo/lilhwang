@@ -108,3 +108,4 @@ Add whatever helps you do your job. This is your cheat sheet.
 - 제한:
   - 이 트리거에서는 다른 이모티콘 폴더를 사용하지 않음
   - 사용자가 "이미지 없이"라고 하면 텍스트만 전송
+  - **중복 방지:** 최근 사용한 `comfort_only` 이미지(최소 최근 3개)는 재선택하지 않음. 후보가 3개 이하일 때만 중복 허용
