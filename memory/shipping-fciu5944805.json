@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T06:29:20Z",
+  "updatedAt": "2026-03-15T09:28:47Z",
   "tracking": {
     "containerNo": "FCIU5944805",
     "blNo": "CF326PCR3001"
@@ -33,8 +33,7 @@
   "check": {
     "containerLookup": "failed_or_no_public_result",
     "blLookup": "failed_or_no_public_result",
-    "changeDetected": true,
-    "changeSummary": "Vessel position summary text changed: Yellow Sea -> South Korean Exclusive Economic Zone"
+    "changeDetected": false
   },
   "apiEvidence": {
     "containerPublic": {
