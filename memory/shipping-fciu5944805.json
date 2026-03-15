@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-15T09:28:47Z",
+  "updatedAt": "2026-03-15T12:28:54Z",
   "tracking": {
     "containerNo": "FCIU5944805",
     "blNo": "CF326PCR3001"
@@ -28,7 +28,7 @@
       }
     ],
     "containerEventVisible": false,
-    "notes": "COSCO public cargo tracking API still returns no data for both container and BL. Vessel area text changed from Yellow Sea to South Korean EEZ."
+    "notes": "No visible change. COSCO public cargo tracking API still returns no data for both container and BL."
   },
   "check": {
     "containerLookup": "failed_or_no_public_result",
