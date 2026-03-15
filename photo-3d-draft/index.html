@@ -10,8 +10,10 @@
     .card { background:#171a21; border:1px solid #2a2f3a; border-radius:14px; padding:16px; margin-bottom:16px; }
     h1,h2 { margin: 0 0 12px; }
     .row { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
-    .preview { width:100%; min-height:260px; border:1px dashed #3b4352; border-radius:10px; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#0b0d12; }
+    .preview { width:100%; min-height:260px; border:1px dashed #3b4352; border-radius:10px; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#0b0d12; position:relative; }
     .preview img { max-width:100%; max-height:360px; object-fit:contain; }
+    .preview-origin img { display:block; }
+    #roiCanvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:auto; cursor:crosshair; }
     input[type="file"], button, input, select { border-radius:8px; border:1px solid #3b4352; background:#10131a; color:#e8ecf1; padding:10px; }
     button { cursor:pointer; }
     button.primary { background:#3a7afe; border-color:#3a7afe; font-weight:600; }
@@ -46,10 +48,18 @@
           <input id="roiWH" placeholder="예: 800x300 (비우면 전체)" />
         </label>
       </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
+        <button id="roiResetBtn">영역 초기화</button>
+        <button id="roiFullBtn">전체 영역으로</button>
+        <span class="small">원본 이미지 위에서 마우스로 드래그하면 OCR 영역을 바로 지정할 수 있어.</span>
+      </div>
       <div class="row">
         <div>
-          <div class="small" style="margin-bottom:6px;">원본</div>
-          <div class="preview"><img id="originalPreview" alt="원본 미리보기" /></div>
+          <div class="small" style="margin-bottom:6px;">원본 (드래그로 OCR 영역 지정)</div>
+          <div class="preview preview-origin">
+            <img id="originalPreview" alt="원본 미리보기" />
+            <canvas id="roiCanvas"></canvas>
+          </div>
         </div>
         <div>
           <div class="small" style="margin-bottom:6px;">배경 제거 결과</div>
@@ -108,27 +118,181 @@
     const originalPreview = document.getElementById('originalPreview');
     const resultPreview = document.getElementById('resultPreview');
     const analysisEl = document.getElementById('analysis');
+    const roiCanvas = document.getElementById('roiCanvas');
+    const roiCtx = roiCanvas.getContext('2d');
 
     let originalImage = null;
+    let originalDataUrl = '';
+    let roiRect = null;
+    let dragStart = null;
 
-    function loadImage(file) {
+    function loadImageFromDataUrl(dataUrl) {
       return new Promise((resolve, reject) => {
         const img = new Image();
-        const url = URL.createObjectURL(file);
-        img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+        img.onload = () => resolve(img);
         img.onerror = reject;
-        img.src = url;
+        img.src = dataUrl;
       });
+    }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(fr.result);
+        fr.onerror = reject;
+        fr.readAsDataURL(file);
+      });
+    }
+
+    function getDisplayRect() {
+      if (!originalImage) return null;
+      const cw = roiCanvas.width, ch = roiCanvas.height;
+      const iw = originalImage.width, ih = originalImage.height;
+      const scale = Math.min(cw / iw, ch / ih);
+      const w = iw * scale;
+      const h = ih * scale;
+      const x = (cw - w) / 2;
+      const y = (ch - h) / 2;
+      return { x, y, w, h, scale };
+    }
+
+    function drawRoiOverlay() {
+      roiCtx.clearRect(0, 0, roiCanvas.width, roiCanvas.height);
+      const display = getDisplayRect();
+      if (!display) return;
+
+      roiCtx.strokeStyle = '#4ea1ff';
+      roiCtx.lineWidth = 2;
+      roiCtx.strokeRect(display.x, display.y, display.w, display.h);
+
+      if (roiRect) {
+        const x = display.x + roiRect.x * display.scale;
+        const y = display.y + roiRect.y * display.scale;
+        const w = roiRect.w * display.scale;
+        const h = roiRect.h * display.scale;
+
+        roiCtx.fillStyle = 'rgba(78,161,255,0.16)';
+        roiCtx.strokeStyle = '#3a7afe';
+        roiCtx.lineWidth = 2;
+        roiCtx.fillRect(x, y, w, h);
+        roiCtx.strokeRect(x, y, w, h);
+      }
+    }
+
+    function syncCanvasSize() {
+      const rect = roiCanvas.getBoundingClientRect();
+      roiCanvas.width = Math.max(1, Math.floor(rect.width));
+      roiCanvas.height = Math.max(1, Math.floor(rect.height));
+      drawRoiOverlay();
+    }
+
+    function applyRoiToInputs() {
+      if (!roiRect) return;
+      document.getElementById('roiX').value = Math.round(roiRect.x);
+      document.getElementById('roiY').value = Math.round(roiRect.y);
+      document.getElementById('roiWH').value = `${Math.round(roiRect.w)}x${Math.round(roiRect.h)}`;
     }
 
     fileInput.addEventListener('change', async () => {
       const file = fileInput.files?.[0];
       if (!file) return;
-      originalImage = await loadImage(file);
-      originalPreview.src = originalImage.src;
+      originalDataUrl = await readFileAsDataUrl(file);
+      originalImage = await loadImageFromDataUrl(originalDataUrl);
+      originalPreview.src = originalDataUrl;
       resultPreview.src = '';
+      roiRect = null;
       analysisEl.textContent = '이미지 로드 완료. 분석 버튼을 눌러줘.';
+      setTimeout(syncCanvasSize, 50);
     });
+
+    window.addEventListener('resize', syncCanvasSize);
+    originalPreview.addEventListener('load', syncCanvasSize);
+
+    roiCanvas.addEventListener('mousedown', (e) => {
+      if (!originalImage) return;
+      const display = getDisplayRect();
+      if (!display) return;
+
+      const rect = roiCanvas.getBoundingClientRect();
+      const cx = e.clientX - rect.left;
+      const cy = e.clientY - rect.top;
+      if (cx < display.x || cy < display.y || cx > display.x + display.w || cy > display.y + display.h) return;
+
+      dragStart = { cx, cy };
+    });
+
+    roiCanvas.addEventListener('mousemove', (e) => {
+      if (!dragStart || !originalImage) return;
+      const display = getDisplayRect();
+      if (!display) return;
+
+      const rect = roiCanvas.getBoundingClientRect();
+      const cx = Math.max(display.x, Math.min(e.clientX - rect.left, display.x + display.w));
+      const cy = Math.max(display.y, Math.min(e.clientY - rect.top, display.y + display.h));
+
+      const x1 = Math.min(dragStart.cx, cx);
+      const y1 = Math.min(dragStart.cy, cy);
+      const x2 = Math.max(dragStart.cx, cx);
+      const y2 = Math.max(dragStart.cy, cy);
+
+      roiRect = {
+        x: (x1 - display.x) / display.scale,
+        y: (y1 - display.y) / display.scale,
+        w: (x2 - x1) / display.scale,
+        h: (y2 - y1) / display.scale,
+      };
+
+      drawRoiOverlay();
+      applyRoiToInputs();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!dragStart) return;
+      dragStart = null;
+      if (roiRect && (roiRect.w < 4 || roiRect.h < 4)) roiRect = null;
+      drawRoiOverlay();
+      applyRoiToInputs();
+    });
+
+    document.getElementById('roiResetBtn').addEventListener('click', () => {
+      roiRect = null;
+      document.getElementById('roiX').value = 0;
+      document.getElementById('roiY').value = 0;
+      document.getElementById('roiWH').value = '';
+      drawRoiOverlay();
+    });
+
+    document.getElementById('roiFullBtn').addEventListener('click', () => {
+      if (!originalImage) return;
+      roiRect = { x: 0, y: 0, w: originalImage.width, h: originalImage.height };
+      applyRoiToInputs();
+      drawRoiOverlay();
+    });
+
+    function applyInputsToRoi() {
+      if (!originalImage) return;
+      const x = Number(document.getElementById('roiX').value || 0);
+      const y = Number(document.getElementById('roiY').value || 0);
+      const wh = (document.getElementById('roiWH').value || '').toLowerCase().trim();
+      const m = wh.match(/(\d+)\s*[x×]\s*(\d+)/);
+      if (!m) {
+        roiRect = null;
+        drawRoiOverlay();
+        return;
+      }
+      const w = Number(m[1]);
+      const h = Number(m[2]);
+      const sx = Math.max(0, Math.min(x, originalImage.width - 1));
+      const sy = Math.max(0, Math.min(y, originalImage.height - 1));
+      const sw = Math.max(1, Math.min(w, originalImage.width - sx));
+      const sh = Math.max(1, Math.min(h, originalImage.height - sy));
+      roiRect = { x: sx, y: sy, w: sw, h: sh };
+      drawRoiOverlay();
+    }
+
+    document.getElementById('roiX').addEventListener('input', applyInputsToRoi);
+    document.getElementById('roiY').addEventListener('input', applyInputsToRoi);
+    document.getElementById('roiWH').addEventListener('input', applyInputsToRoi);
 
     document.getElementById('analyzeBtn').addEventListener('click', () => {
       if (!originalImage) return alert('먼저 이미지를 올려줘.');
@@ -257,25 +421,31 @@
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
-      if (!m) {
-        canvas.width = originalImage.width;
-        canvas.height = originalImage.height;
-        ctx.drawImage(originalImage, 0, 0);
-        return { url: canvas.toDataURL('image/png'), roi: `전체(${originalImage.width}x${originalImage.height})` };
-      }
+      let sx = 0, sy = 0, sw = originalImage.width, sh = originalImage.height;
 
-      const w = Number(m[1]);
-      const h = Number(m[2]);
-      const sx = Math.max(0, Math.min(x, originalImage.width - 1));
-      const sy = Math.max(0, Math.min(y, originalImage.height - 1));
-      const sw = Math.max(1, Math.min(w, originalImage.width - sx));
-      const sh = Math.max(1, Math.min(h, originalImage.height - sy));
+      if (roiRect) {
+        sx = Math.max(0, Math.floor(roiRect.x));
+        sy = Math.max(0, Math.floor(roiRect.y));
+        sw = Math.max(1, Math.floor(roiRect.w));
+        sh = Math.max(1, Math.floor(roiRect.h));
+      } else if (m) {
+        const w = Number(m[1]);
+        const h = Number(m[2]);
+        sx = Math.max(0, Math.min(x, originalImage.width - 1));
+        sy = Math.max(0, Math.min(y, originalImage.height - 1));
+        sw = Math.max(1, Math.min(w, originalImage.width - sx));
+        sh = Math.max(1, Math.min(h, originalImage.height - sy));
+      }
 
       canvas.width = sw;
       canvas.height = sh;
       ctx.drawImage(originalImage, sx, sy, sw, sh, 0, 0, sw, sh);
 
-      return { url: canvas.toDataURL('image/png'), roi: `${sx},${sy},${sw},${sh}` };
+      const roiText = (sx === 0 && sy === 0 && sw === originalImage.width && sh === originalImage.height)
+        ? `전체(${originalImage.width}x${originalImage.height})`
+        : `${sx},${sy},${sw},${sh}`;
+
+      return { url: canvas.toDataURL('image/png'), roi: roiText };
     }
 
     function extractDimCandidates(text) {
